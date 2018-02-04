@@ -15,6 +15,8 @@ public:
 	double toRadians(double angle); //converts from degrees to radians	
 	double toDegrees(double angle); //converts fron radians to degrees
 	bool isPowerTwo(int number); //checks if a number is a power of two
+	double angularDistanceR(double angle1, double angle2); //calculates the angular distance in radians
+	double angularDistanceD(double angle1, double angle2); //calculates the angular distance in degrees
 
 
 	//clamps a number to the range specified
@@ -85,6 +87,13 @@ public:
 		type values[] = { number1, number2, number3, number4 };
 		sort(values, values + 4);
 		return values[0];
+	}
+
+	//interpolates a number between a start and an end value;
+	template <typename type>
+	type interpolate(type number, type begin, type end)
+	{
+		return (number*(end - begin)) - begin;
 	}
 };
 

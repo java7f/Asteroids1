@@ -1,6 +1,7 @@
 #include "App.hpp"
 #include <iostream>
 #include <algorithm>
+#include "Player.hpp"
 
 // OpenGL includes
 #include <GL/glew.h>
@@ -10,6 +11,7 @@ namespace Engine
 {
 	const float DESIRED_FRAME_RATE = 60.0f;
 	const float DESIRED_FRAME_TIME = 1.0f / DESIRED_FRAME_RATE;
+	Player player = Player();
 
 	App::App(const std::string& title, const int width, const int height)
 		: m_title(title)
@@ -80,6 +82,18 @@ namespace Engine
 	{		
 		switch (keyBoardEvent.keysym.scancode)
 		{
+		case SDL_SCANCODE_W:
+			player.Move(Vector2(0, 10));
+			break;
+		case SDL_SCANCODE_S:
+			player.Move(Vector2(0, -10));
+			break;
+		case SDL_SCANCODE_A:
+			player.Move(Vector2(-10, 0));
+			break;
+		case SDL_SCANCODE_D:
+			player.Move(Vector2(10, 0));
+			break;
 		default:			
 			SDL_Log("%S was pressed.", keyBoardEvent.keysym.scancode);
 			break;
@@ -124,16 +138,7 @@ namespace Engine
 
 	void App::Render()
 	{
-		glClearColor(0.1f, 0.1f, 0.15f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
-
-		glBegin(GL_LINE_LOOP);
-		glVertex2f(50.0, 50.0);
-		glVertex2f(50.0, -50.0);
-		glVertex2f(-50.0, -50.0);
-		glVertex2f(-50.0, 50.0);
-		glEnd();
-
+		player.Render();
 		SDL_GL_SwapWindow(m_mainWindow);
 	}
 

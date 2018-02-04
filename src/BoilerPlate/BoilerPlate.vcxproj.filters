@@ -6,11 +6,19 @@
     <ClCompile Include="SDLEvent.cpp" />
     <ClCompile Include="TimeManager.cpp" />
     <ClCompile Include="stb_image.c" />
+    <ClCompile Include="Color.cpp" />
+    <ClCompile Include="MathUtilities.cpp" />
+    <ClCompile Include="Palette.cpp" />
+    <ClCompile Include="Vector2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.hpp" />
     <ClInclude Include="SDLEvent.hpp" />
     <ClInclude Include="TimeManager.hpp" />
+    <ClInclude Include="Color.h" />
+    <ClInclude Include="MathUtilities.h" />
+    <ClInclude Include="Palette.h" />
+    <ClInclude Include="Vector2.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">

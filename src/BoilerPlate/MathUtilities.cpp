@@ -49,3 +49,19 @@ bool MathUtilities::isPowerTwo(int number)
 	else
 		return false;
 }
+
+double MathUtilities::angularDistanceR(double angle1, double angle2)
+{
+	double result = angle1 - angle2;
+	if (result < 0)
+		result += (2*3.14);
+	return result;
+}
+
+double MathUtilities::angularDistanceD(double angle1, double angle2)
+{
+	double result = angle1 - angle2;
+	if (result < 0)
+		result += 360;
+	return result;
+}
