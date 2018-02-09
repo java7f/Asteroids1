@@ -20,11 +20,18 @@ void Player::Render()
 	glClearColor(background.getRedValue(), background.getGreenValue(), background.getBlueValue(), background.getOpacityValue());
 	glClear(GL_COLOR_BUFFER_BIT);
 
+
+	/*0, 20
+12, -10
+6, -4
+-6, -4
+-12, -10*/
 	glBegin(GL_LINE_LOOP);
-	glVertex2f((50.0 + position.x), (50.0 + position.y));
-	glVertex2f((50.0 + position.x), (-50.0 + position.y));
-	glVertex2f((-50.0 + position.x), (-50.0 + position.y));
-	glVertex2f((-50.0 + position.x), (50.0 + position.y));
+	glVertex2f((0 + position.x), (20 + position.y));
+	glVertex2f((12 + position.x), (-10 + position.y));
+	glVertex2f((6 + position.x), (-4 + position.y));
+	glVertex2f((-6 + position.x), (-4 + position.y));
+	glVertex2f((-12 + position.x), (-10 + position.y));
 	glEnd();
 }
 
