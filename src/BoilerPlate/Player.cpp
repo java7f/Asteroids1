@@ -7,6 +7,7 @@
 Player::Player()
 {
 	position = Vector2(0, 0);
+	isWPressed = false;
 }
 
 Player::~Player()
@@ -21,11 +22,6 @@ void Player::Render()
 	glClear(GL_COLOR_BUFFER_BIT);
 
 
-	/*0, 20
-12, -10
-6, -4
--6, -4
--12, -10*/
 	glBegin(GL_LINE_LOOP);
 	glVertex2f((0 + position.x), (20 + position.y));
 	glVertex2f((12 + position.x), (-10 + position.y));
@@ -33,6 +29,15 @@ void Player::Render()
 	glVertex2f((-6 + position.x), (-4 + position.y));
 	glVertex2f((-12 + position.x), (-10 + position.y));
 	glEnd();
+
+	if (isWPressed)
+	{
+		glBegin(GL_LINE_LOOP);
+		glVertex2f((-6 + position.x), (-4 + position.y));
+		glVertex2f((6 + position.x), (-4 + position.y));
+		glVertex2f((0 + position.x), (-12 + position.y));
+		glEnd();
+	}
 }
 
 void Player::Move(Vector2 &moveValues)

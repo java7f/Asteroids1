@@ -84,6 +84,7 @@ namespace Engine
 		{
 		case SDL_SCANCODE_W:
 			player.Move(Vector2(0, 10));
+			player.isWPressed = true;
 			break;
 		case SDL_SCANCODE_S:
 			player.Move(Vector2(0, -10));
@@ -106,6 +107,9 @@ namespace Engine
 		{
 		case SDL_SCANCODE_ESCAPE:
 			OnExit();
+			break;
+		case SDL_SCANCODE_W:
+			player.isWPressed = false;
 			break;
 		default:
 			//DO NOTHING

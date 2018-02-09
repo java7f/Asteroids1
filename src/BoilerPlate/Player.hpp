@@ -9,6 +9,8 @@ public:
 	void Render();
 	void Move(Vector2&);
 
+	bool isWPressed;
+
 private:
 	Vector2 position;
 };
