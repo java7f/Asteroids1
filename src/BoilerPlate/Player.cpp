@@ -72,7 +72,7 @@ void Player::setMovingForwardState(bool isWPressed)
 	isMovingForward = isWPressed;
 }
 
-//
+//changes the value of the frame height and width
 void Player::updateFrameData(int height, int width)
 {
 	frameHeight = height;
