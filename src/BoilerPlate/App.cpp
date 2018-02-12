@@ -84,6 +84,7 @@ namespace Engine
 		{
 		case SDL_SCANCODE_W:
 			player.Move(Vector2(0, 10));
+			player.setMovingForwardState(true);
 			break;
 		case SDL_SCANCODE_S:
 			player.Move(Vector2(0, -10));
@@ -106,6 +107,9 @@ namespace Engine
 		{
 		case SDL_SCANCODE_ESCAPE:
 			OnExit();
+			break;
+		case SDL_SCANCODE_W:
+			player.setMovingForwardState(false);
 			break;
 		default:
 			//DO NOTHING
@@ -139,6 +143,7 @@ namespace Engine
 	void App::Render()
 	{
 		player.Render();
+		player.updateFrameData(m_height, m_width);
 		SDL_GL_SwapWindow(m_mainWindow);
 	}
 
@@ -237,6 +242,8 @@ namespace Engine
 		//
 		m_width = width;
 		m_height = height;
+
+		player.updateFrameData(m_height, m_width);
 
 		SetupViewport();
 	}
