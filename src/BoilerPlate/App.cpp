@@ -83,17 +83,14 @@ namespace Engine
 		switch (keyBoardEvent.keysym.scancode)
 		{
 		case SDL_SCANCODE_W:
-			player.Move(Vector2(0, 10));
+			player.MoveForward();
 			player.setMovingForwardState(true);
 			break;
-		case SDL_SCANCODE_S:
-			player.Move(Vector2(0, -10));
-			break;
 		case SDL_SCANCODE_A:
-			player.Move(Vector2(-10, 0));
+			player.RotateLeft();
 			break;
 		case SDL_SCANCODE_D:
-			player.Move(Vector2(10, 0));
+			player.RotateRight();
 			break;
 		default:			
 			SDL_Log("%S was pressed.", keyBoardEvent.keysym.scancode);

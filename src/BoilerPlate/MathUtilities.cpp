@@ -11,6 +11,8 @@ MathUtilities::~MathUtilities()
 {
 }
 
+const double MathUtilities::PI = 3.14159265;
+
 int MathUtilities::floatToInt(float number)
 {
 	return number+0.5;

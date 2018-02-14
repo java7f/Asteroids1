@@ -1,5 +1,6 @@
 #include "Player.hpp"
 #include "Palette.h"
+#include <cmath>
 // OpenGL includes
 #include <GL/glew.h>
 #include <SDL2/SDL_opengl.h>
@@ -13,6 +14,8 @@ Player::Player()
 	//Frame data savers
 	frameHeight = 0;
 	frameWidth = 0;
+	rotationAngle = 0;
+	mathToools = MathUtilities();
 }
 
 Player::~Player()
@@ -26,8 +29,14 @@ void Player::Render()
 	glClearColor(background.getRedValue(), background.getGreenValue(), background.getBlueValue(), background.getOpacityValue());
 	glClear(GL_COLOR_BUFFER_BIT);
 
+	drawShip();
+}
+
+void Player::drawShip()
+{
 	glLoadIdentity();
-	glTranslatef(position.x, position.y, 0.0f);
+	glTranslated(position.x, position.y, 0.0);
+	glRotated(rotationAngle, 0.0, 0.0, 1.0);
 	glBegin(GL_LINE_LOOP);
 	glVertex2f((0), (30));
 	glVertex2f((20), (-15));
@@ -47,6 +56,8 @@ void Player::Render()
 	}
 }
 
+
+
 void Player::Move(Vector2 &moveValues)
 {
 	position.x += moveValues.x;
@@ -56,6 +67,24 @@ void Player::Move(Vector2 &moveValues)
 	Warp(frameHeight, frameWidth);
 }
 
+void Player::MoveForward()
+{
+	double moveValue = 10;
+	position.x -= moveValue * sin(mathToools.toRadians(rotationAngle));
+	position.y += moveValue * cos(mathToools.toRadians(rotationAngle));
+
+	Warp(frameHeight, frameWidth);
+}
+
+void Player::RotateLeft()
+{
+	rotationAngle += 15;
+}
+
+void Player::RotateRight()
+{
+	rotationAngle -= 15;
+}
 
 void Player::Warp(int frameHeight, int frameWidth)
 {
