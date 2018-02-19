@@ -20,12 +20,15 @@ Entity::~Entity()
 
 void Entity::Update()
 {
+	//To be implemented later
 }
 
 void Entity::Render()
 {
+	//To be implemented in the children classes
 }
 
+//Makes the entity appear on the opposite side of the screen if it reaches a border
 void Entity::Warp(int frameHeight, int frameWidth)
 {
 	if (position_.y > (frameHeight / 2) || position_.y < (-frameHeight / 2))
@@ -35,6 +38,14 @@ void Entity::Warp(int frameHeight, int frameWidth)
 		position_.x *= -1;
 }
 
-void Entity::drawEntity()
+void Entity::DrawEntity()
 {
+	//To be implemented in the children classes
+}
+
+//changes the value of the frame height and width
+void Entity::UpdateFrameData(int height, int width)
+{
+	frameHeight_ = height;
+	frameWidth_ = width;
 }

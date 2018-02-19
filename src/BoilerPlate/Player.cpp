@@ -1,5 +1,5 @@
 #include "Player.hpp"
-#include "Palette.h"
+#include "Palette.hpp"
 #include <cmath>
 // OpenGL includes
 #include <GL/glew.h>
@@ -22,6 +22,7 @@ Player::~Player()
 
 void Player::Update()
 {
+	//To be implemented later
 }
 
 void Player::Render()
@@ -31,10 +32,11 @@ void Player::Render()
 	glClearColor(background.getRedValue(), background.getGreenValue(), background.getBlueValue(), background.getOpacityValue());
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	drawEntity();
+	DrawEntity();
 }
 
-void Player::drawEntity()
+//Hides the process of drawing the ship and saves the ship and thruster points
+void Player::DrawEntity()
 {
 	shipContainer_.push_back(Vector2(0, 30));
 	shipContainer_.push_back(Vector2(20, -15));
@@ -69,35 +71,32 @@ void Player::drawEntity()
 }
 
 
+//Makes the ship move to where is pointing
 void Player::MoveForward()
 {
 	double moveValue = 10;
-	position_.x -= moveValue * sin(mathToools_.toRadians(rotationAngle));
-	position_.y += moveValue * cos(mathToools_.toRadians(rotationAngle));
+	position_.x -= moveValue * sin(mathToools_.ToRadians(rotationAngle));
+	position_.y += moveValue * cos(mathToools_.ToRadians(rotationAngle));
 
 	Warp(frameHeight_, frameWidth_);
 }
 
+//Increments the rotation angle
 void Player::RotateLeft()
 {
 	rotationAngle += 15;
 }
 
+//Minimizes the rotation angle
 void Player::RotateRight()
 {
 	rotationAngle -= 15;
 }
 
 //changes if the key that makes the ship move forward is pressed
-void Player::setMovingForwardState(bool isWPressed)
+void Player::SetMovingForwardState(bool isWPressed)
 {
 	isMovingForward = isWPressed;
 }
 
-//changes the value of the frame height and width
-void Player::updateFrameData(int height, int width)
-{
-	frameHeight_ = height;
-	frameWidth_ = width;
-}
 

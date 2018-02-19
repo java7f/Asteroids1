@@ -1,5 +1,5 @@
 #pragma once
-#include "Color.h"
+#include "Color.hpp"
 
 //Class that contains different colors
 static class Palette

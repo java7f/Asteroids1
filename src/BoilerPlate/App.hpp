@@ -71,7 +71,7 @@ namespace Engine
 		Engine::TimeManager*				m_timer;
 
 		Player player = Player();
-		Asteroid asteroid = Asteroid(asteroid.BIG);
+		Asteroid asteroid = Asteroid(asteroid.SMALL);
 
 	};
 }

@@ -82,7 +82,7 @@ namespace Engine
 		{
 		case SDL_SCANCODE_W:
 			player.MoveForward();
-			player.setMovingForwardState(true);
+			player.SetMovingForwardState(true);
 			break;
 		case SDL_SCANCODE_A:
 			player.RotateLeft();
@@ -104,7 +104,7 @@ namespace Engine
 			OnExit();
 			break;
 		case SDL_SCANCODE_W:
-			player.setMovingForwardState(false);
+			player.SetMovingForwardState(false);
 			break;
 		default:
 			//DO NOTHING
@@ -139,7 +139,7 @@ namespace Engine
 	{
 		player.Render();
 		asteroid.Render();
-		player.updateFrameData(m_height, m_width);
+		player.UpdateFrameData(m_height, m_width);
 		SDL_GL_SwapWindow(m_mainWindow);
 	}
 
@@ -239,7 +239,7 @@ namespace Engine
 		m_width = width;
 		m_height = height;
 
-		player.updateFrameData(m_height, m_width);
+		player.UpdateFrameData(m_height, m_width);
 
 		SetupViewport();
 	}
