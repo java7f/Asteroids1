@@ -1,7 +1,6 @@
 #include "App.hpp"
 #include <iostream>
 #include <algorithm>
-#include "Player.hpp"
 
 // OpenGL includes
 #include <GL/glew.h>
@@ -11,7 +10,6 @@ namespace Engine
 {
 	const float DESIRED_FRAME_RATE = 60.0f;
 	const float DESIRED_FRAME_TIME = 1.0f / DESIRED_FRAME_RATE;
-	Player player = Player();
 
 	App::App(const std::string& title, const int width, const int height)
 		: m_title(title)
@@ -140,6 +138,7 @@ namespace Engine
 	void App::Render()
 	{
 		player.Render();
+		asteroid.Render();
 		player.updateFrameData(m_height, m_width);
 		SDL_GL_SwapWindow(m_mainWindow);
 	}
