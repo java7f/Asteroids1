@@ -8,6 +8,9 @@ using namespace std;
 class MathUtilities
 {
 public:
+
+	const static double PI;
+
 	MathUtilities();
 	~MathUtilities();
 	int floatToInt(float number); //rounds to the nearest integer

@@ -10,6 +10,9 @@
 #include "SDLEvent.hpp"
 #include "TimeManager.hpp"
 
+#include "Player.hpp"
+#include "Asteroid.hpp"
+
 namespace Engine
 {
 	class App : public SDLEvent
@@ -66,6 +69,9 @@ namespace Engine
 		SDL_GLContext						m_context;
 		GameState::State					m_state;
 		Engine::TimeManager*				m_timer;
+
+		Player player = Player();
+		Asteroid asteroid = Asteroid(asteroid.BIG);
 
 	};
 }
