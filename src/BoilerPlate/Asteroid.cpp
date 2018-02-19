@@ -45,3 +45,8 @@ void Asteroid::drawEntity()
 	}
 	glEnd();
 }
+
+Asteroid::AsteroidSize Asteroid::getSize()
+{
+	return size_;
+}

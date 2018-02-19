@@ -20,6 +20,7 @@ public:
 	void Update() override;
 	void Render() override;
 	void drawEntity() override;
+	AsteroidSize getSize();
 
 private:
 	//Attributes
