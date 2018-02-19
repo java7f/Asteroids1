@@ -1,6 +1,7 @@
 #pragma once
-#include "Vector2.hpp"
-class Player
+#include "Entity.hpp"
+#include "MathUtilities.h"
+class Player : public Entity
 {
 public:
 
@@ -9,18 +10,21 @@ public:
 	~Player();
 
 	//Public functions
-	void Update();
-	void Render();
-	void Move(Vector2&);
-	void Warp(int, int);
+	void Update() override;
+	void Render() override;
+	void drawEntity() override;
+	void MoveForward();
+	void RotateLeft();
+	void RotateRight();
 	void setMovingForwardState(bool);
 	void updateFrameData(int, int);
 
 private:
-	//Attributes
-	Vector2 position;
+	vector<Vector2> shipContainer_;
+	vector<Vector2> thrusterContainer_;
+	MathUtilities mathToools_;
+
 	bool isMovingForward;
-	int frameHeight;
-	int frameWidth;
+	double rotationAngle;
 };
 

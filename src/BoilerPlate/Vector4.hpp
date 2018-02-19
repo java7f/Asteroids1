@@ -22,9 +22,6 @@ struct Vector4
 	double Module();
 	double SquaredLenght();
 	void Normalize();
-	void MoveForward();
-	void RotateLeft();
-	void RotateRight();
 
 	//Operators to overload
 	Vector4& operator = (const Vector4&);
