@@ -190,10 +190,10 @@ copy /Y "$(SolutionDir)\Externals\SDL2-2.0.4\lib\x64\SDL2.dll" "$(TargetDir)SDL2
   <ItemGroup>
     <ClInclude Include="App.hpp" />
     <ClInclude Include="Asteroid.hpp" />
-    <ClInclude Include="Color.h" />
+    <ClInclude Include="Color.hpp" />
     <ClInclude Include="Entity.hpp" />
-    <ClInclude Include="MathUtilities.h" />
-    <ClInclude Include="Palette.h" />
+    <ClInclude Include="MathUtilities.hpp" />
+    <ClInclude Include="Palette.hpp" />
     <ClInclude Include="Player.hpp" />
     <ClInclude Include="SDLEvent.hpp" />
     <ClInclude Include="TimeManager.hpp" />

@@ -1,4 +1,4 @@
-#include "MathUtilities.h"
+#include "MathUtilities.hpp"
 
 
 
@@ -13,12 +13,12 @@ MathUtilities::~MathUtilities()
 
 const double MathUtilities::PI = 3.14159265;
 
-int MathUtilities::floatToInt(float number)
+int MathUtilities::FloatToInt(float number)
 {
 	return number+0.5;
 }
 
-int MathUtilities::floatToEvenInt(float number)
+int MathUtilities::FloatToEvenInt(float number)
 {
 	int returningInt = number + 0.5;
 	if (returningInt % 2 == 0)
@@ -31,17 +31,17 @@ int MathUtilities::floatToEvenInt(float number)
 	}
 }
 
-double MathUtilities::toRadians(double angle)
+double MathUtilities::ToRadians(double angle)
 {
 	return ((angle*3.14)/180);
 }
 
-double MathUtilities::toDegrees(double angle)
+double MathUtilities::ToDegrees(double angle)
 {
 	return ((angle*180)/3.14);
 }
 
-bool MathUtilities::isPowerTwo(int number)
+bool MathUtilities::IsPowerOfTwo(int number)
 {
 	double value = log2(number);
 	if (fmod(value, 1) == 0.0) //function that checks if the number is an integer
@@ -52,7 +52,7 @@ bool MathUtilities::isPowerTwo(int number)
 		return false;
 }
 
-double MathUtilities::angularDistanceR(double angle1, double angle2)
+double MathUtilities::AngularDistanceR(double angle1, double angle2)
 {
 	double result = angle1 - angle2;
 	if (result < 0)
@@ -60,7 +60,7 @@ double MathUtilities::angularDistanceR(double angle1, double angle2)
 	return result;
 }
 
-double MathUtilities::angularDistanceD(double angle1, double angle2)
+double MathUtilities::AngularDistanceD(double angle1, double angle2)
 {
 	double result = angle1 - angle2;
 	if (result < 0)
