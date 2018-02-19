@@ -13,13 +13,13 @@ public:
 
 	MathUtilities();
 	~MathUtilities();
-	int floatToInt(float number); //rounds to the nearest integer
-	int floatToEvenInt(float number); //rounds to the nearest even number
-	double toRadians(double angle); //converts from degrees to radians	
-	double toDegrees(double angle); //converts fron radians to degrees
-	bool isPowerTwo(int number); //checks if a number is a power of two
-	double angularDistanceR(double angle1, double angle2); //calculates the angular distance in radians
-	double angularDistanceD(double angle1, double angle2); //calculates the angular distance in degrees
+	int FloatToInt(float number); //rounds to the nearest integer
+	int FloatToEvenInt(float number); //rounds to the nearest even number
+	double ToRadians(double angle); //converts from degrees to radians	
+	double ToDegrees(double angle); //converts fron radians to degrees
+	bool IsPowerOfTwo(int number); //checks if a number is a power of two
+	double AngularDistanceR(double angle1, double angle2); //calculates the angular distance in radians
+	double AngularDistanceD(double angle1, double angle2); //calculates the angular distance in degrees
 
 
 	//clamps a number to the range specified

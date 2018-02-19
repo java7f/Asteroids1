@@ -1,11 +1,12 @@
 #pragma once
-#include "MathUtilities.h"
+#include "MathUtilities.hpp"
 #include "Entity.hpp"
 
 class Asteroid : public Entity
 {
 public:
 
+	//Controls the sizes that can be applied to the ship
 	enum AsteroidSize
 	{
 		SMALL = 1,
@@ -13,17 +14,18 @@ public:
 		BIG = 3,
 	};
 
+	//Constructors
 	Asteroid(AsteroidSize size);
 	~Asteroid();
 
 	//Public functions
 	void Update() override;
 	void Render() override;
-	void drawEntity() override;
+	void DrawEntity() override;
 	AsteroidSize getSize();
 
 private:
-	//Attributes
+	//Members
 	AsteroidSize size_;
 	vector<Vector2> asteroidContainer_;
 };

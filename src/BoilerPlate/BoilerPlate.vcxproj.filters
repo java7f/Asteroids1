@@ -20,15 +20,15 @@
     <ClInclude Include="App.hpp" />
     <ClInclude Include="SDLEvent.hpp" />
     <ClInclude Include="TimeManager.hpp" />
-    <ClInclude Include="Color.h" />
-    <ClInclude Include="MathUtilities.h" />
-    <ClInclude Include="Palette.h" />
     <ClInclude Include="Vector2.hpp" />
     <ClInclude Include="Player.hpp" />
     <ClInclude Include="Vector3.hpp" />
     <ClInclude Include="Vector4.hpp" />
     <ClInclude Include="Asteroid.hpp" />
     <ClInclude Include="Entity.hpp" />
+    <ClInclude Include="MathUtilities.hpp" />
+    <ClInclude Include="Palette.hpp" />
+    <ClInclude Include="Color.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">

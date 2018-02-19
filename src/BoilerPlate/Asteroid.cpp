@@ -1,5 +1,5 @@
 #include "Asteroid.hpp"
-#include "Palette.h"
+#include "Palette.hpp"
 #include <cmath>
 // OpenGL includes
 #include <GL/glew.h>
@@ -19,14 +19,16 @@ Asteroid::~Asteroid()
 
 void Asteroid::Update()
 {
+	//To be implemented later
 }
 
 void Asteroid::Render()
 {
-	drawEntity();
+	DrawEntity();
 }
 
-void Asteroid::drawEntity()
+//Hides the process of drawing the asteroid and saves the ship and thruster points
+void Asteroid::DrawEntity()
 {
 	asteroidContainer_.push_back(Vector2(0*size_, 40*size_));
 	asteroidContainer_.push_back(Vector2(14 * size_, 34 * size_));
@@ -46,6 +48,7 @@ void Asteroid::drawEntity()
 	glEnd();
 }
 
+//Returns the size of the asteroid
 Asteroid::AsteroidSize Asteroid::getSize()
 {
 	return size_;
