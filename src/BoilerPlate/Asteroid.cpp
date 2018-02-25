@@ -11,20 +11,25 @@ const double IMPULSE_ANGLE = 100;
 
 Asteroid::Asteroid(AsteroidSize size)
 {
-	position_ = Vector2(rand()%1000, rand()%1000);
+	position_ = Vector2(rand()%800, rand()%800);
 	velocity_ = Vector2(0, 0);
+
 	mathTools_ = MathUtilities();
-	mass_ = 0.87;
+	mass_ = 1.25;
 	rotationAngle = 0;
 	size_ = size;
 	rotationFactor = 120;
 	radius_ = 15*size_;
+
+	moveAngle = rand();
+	moveValue = 50;
 }
 
 Asteroid::~Asteroid()
 {
 }
 
+//Saves the asteroid data
 void Asteroid::PushEntityVertices()
 {
 	asteroidContainer_.push_back(Vector2(-12.2 * size_, 3.7 * size_));
@@ -40,6 +45,7 @@ void Asteroid::PushEntityVertices()
 	asteroidContainer_.push_back(Vector2(-13.6 * size_, -3.1 * size_));
 }
 
+//draws the hit box
 void Asteroid::DebuggingHitBox()
 {
 	int numbersOfLines = 500;
@@ -55,6 +61,7 @@ void Asteroid::DebuggingHitBox()
 
 void Asteroid::Update(double deltaTime)
 {
+	//Changes the rotation angle
 	rotationAngle += rotationFactor * deltaTime;
 	EntityImpulse();
 	Entity::Update(deltaTime);
@@ -67,11 +74,16 @@ void Asteroid::Render()
 	glRotated(rotationAngle, 0.0, 0.0, 1.0);
 	PushEntityVertices();
 	DrawEntity();
-	if(isDebugging)
+
+	//Decides if the hit box shows or not
+	if(isDebugging_)
 		DebuggingHitBox();
+
+	//Cleaning up asteroid vector
 	asteroidContainer_.clear();
 }
 
+//draws the asteroid
 void Asteroid::DrawEntity()
 {
 	glBegin(GL_LINE_LOOP);
@@ -82,10 +94,12 @@ void Asteroid::DrawEntity()
 	glEnd();
 }
 
+//Increments the velocity
 void Asteroid::EntityImpulse()
 {
-	double moveValue = 50;
-	double moveAngle = rand() % 500;
-	velocity_.x = (moveValue)* sin(mathTools_.ToRadians(moveAngle));
-	velocity_.y = (moveValue)* cos(mathTools_.ToRadians(moveValue));
+	if (mass_ > 0)
+	{
+		velocity_.x = (moveValue/mass_)* sin(mathTools_.ToRadians(moveAngle));
+		velocity_.y = (moveValue/mass_)* cos(mathTools_.ToRadians(moveAngle));
+	}
 }

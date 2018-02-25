@@ -3,7 +3,7 @@
 Entity::Entity()
 {
 	//Position of the player is set to origin
-	//position_ = Vector2(0, 0);
+	position_ = Vector2(0, 0);
 	velocity_ = Vector2(0, 0);
 
 	//Frame data savers
@@ -12,7 +12,9 @@ Entity::Entity()
 
 	mass_ = 0;
 	rotationAngle = 0;
-	isDebugging = false;
+	isDebugging_ = false;
+
+	moveValue = 0;
 }
 
 
@@ -64,32 +66,39 @@ void Entity::UpdateFrameData(int height, int width)
 
 void Entity::EntityImpulse()
 {
+	//To be implemented in childre classes
 }
 
 void Entity::PushEntityVertices()
 {
+	//To be implemented in the children classes
 }
 
 void Entity::DebuggingHitBox()
 {
+	//To be implemented in the children classes
 }
 
-void Entity::setDebuggingState(bool state)
+//Controls if the entities are on debugging mode
+void Entity::ChangeDebuggingState()
 {
-	isDebugging = state;
+	if (isDebugging_)
+		isDebugging_ = false;
+	else if (!isDebugging_)
+		isDebugging_ = true;
 }
 
-Vector2 Entity::getPosition()
+Vector2 Entity::GetPosition()
 {
 	return position_;
 }
 
-bool Entity::getDebuggingStatus()
+bool Entity::GetDebuggingStatus()
 {
-	return isDebugging;
+	return isDebugging_;
 }
 
-double Entity::getRadius()
+double Entity::GetRadius()
 {
 	return radius_;
 }

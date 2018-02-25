@@ -5,15 +5,22 @@
 #include <GL/glew.h>
 #include <SDL2/SDL_opengl.h>
 
+const double MAX_SPEED = 500;
+const double FRICTION = 0.98;
+
 Player::Player()
 {
 	Entity();
+
 	//Controls if the ship is moving forward
 	isMovingForward = false;
+
 	rotationAngle = 0;
-	mass_ = 0.98;
+	mass_ = 1;
 	radius_ = 25;
 	mathTools_ = MathUtilities();
+
+	moveValue = 10;
 }
 
 Player::~Player()
@@ -23,15 +30,18 @@ Player::~Player()
 void Player::Update(double deltaTime)
 {
 	double speed = velocity_.Module();
+
+	//If is not moving, makes it stop 
 	if (!isMovingForward)
 	{
-		velocity_ *= 0.98;
+		velocity_ *= FRICTION;
 	}
 
-	if (speed >= 500)
+	//Controlling the max speed of the ship
+	if (speed >= MAX_SPEED)
 	{
-		velocity_.x = (velocity_.x / speed) * 500;
-		velocity_.y = (velocity_.y / speed) * 500;
+		velocity_.x = (velocity_.x / speed) * MAX_SPEED;
+		velocity_.y = (velocity_.y / speed) * MAX_SPEED;
 	}
 
 	Entity::Update(deltaTime);
@@ -46,13 +56,17 @@ void Player::Render()
 
 	PushEntityVertices();
 	DrawEntity();
-	if(isDebugging)
+
+	//Decides id the hit box shows or not
+	if(isDebugging_)
 		DebuggingHitBox();
+
+	//Cleaning up the vectors 
 	shipContainer_.clear();
 	thrusterContainer_.clear();
 }
 
-//Hides the process of drawing the ship and saves the ship and thruster points
+//Hides the process of drawing the ship 
 void Player::DrawEntity()
 {
 
@@ -83,7 +97,6 @@ void Player::DrawEntity()
 void Player::MoveForward()
 {
 	EntityImpulse();
-	//Warp(frameHeight_, frameWidth_);
 }
 
 //Increments the rotation angle
@@ -104,13 +117,14 @@ void Player::SetMovingForwardState(bool isWPressed)
 	isMovingForward = isWPressed;
 }
 
+//Increments velocity
 void Player::EntityImpulse()
 {
-	double moveValue = 10;
 	velocity_.x -= (moveValue/mass_) * sin(mathTools_.ToRadians(rotationAngle));
 	velocity_.y += (moveValue/mass_) * cos(mathTools_.ToRadians(rotationAngle));
 }
 
+//Saves the ship and the thruster data
 void Player::PushEntityVertices()
 {
 	shipContainer_.push_back(Vector2(0, 30));
@@ -124,6 +138,7 @@ void Player::PushEntityVertices()
 	thrusterContainer_.push_back(Vector2(0, -18));
 }
 
+//Draws the hit box 
 void Player::DebuggingHitBox()
 {
 	int numbersOfLines = 500;

@@ -21,10 +21,10 @@ public:
 	virtual void EntityImpulse();
 	virtual void PushEntityVertices();
 	virtual void DebuggingHitBox();
-	virtual void setDebuggingState(bool);
-	virtual Vector2 getPosition();
-	virtual bool getDebuggingStatus();
-	virtual double getRadius();
+	virtual void ChangeDebuggingState();
+	virtual Vector2 GetPosition();
+	virtual bool GetDebuggingStatus();
+	virtual double GetRadius();
 
 protected:
 	//Members
@@ -35,7 +35,9 @@ protected:
 	int frameHeight_;
 	int frameWidth_;
 	double radius_;
+	bool isDebugging_;
+
 	double rotationAngle;
-	bool isDebugging;
+	double moveValue;
 };
 

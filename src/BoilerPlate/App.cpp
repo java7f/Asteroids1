@@ -78,29 +78,33 @@ namespace Engine
 
 	void App::OnKeyDown(SDL_KeyboardEvent keyBoardEvent)
 	{		
+		//[WIP] missing game input manager 
 		switch (keyBoardEvent.keysym.scancode)
 		{
 		case SDL_SCANCODE_W:
-			game.player.MoveForward();
-			game.player.SetMovingForwardState(true);
+			game.player_.MoveForward();
+			game.player_.SetMovingForwardState(true);
 			break;
 		case SDL_SCANCODE_A:
-			game.player.RotateLeft();
+			game.player_.RotateLeft();
 			break;
 		case SDL_SCANCODE_D:
-			game.player.RotateRight();
+			game.player_.RotateRight();
 			break;
-		case SDL_SCANCODE_Q:
-			game.asteroids.push_back(Asteroid(Asteroid::BIG));
+
+		case SDL_SCANCODE_Q: //The Q key adds more asteroids
+			game.asteroids_.push_back(Asteroid(Asteroid::SMALL));
 			break;
-		case SDL_SCANCODE_E:
-			game.asteroids.pop_back();
+		case SDL_SCANCODE_E: //The E key eliminates the asteroids 
+			if(game.asteroids_.size()>0)
+				game.asteroids_.pop_back();
 			break;
-		case SDL_SCANCODE_F:
-			game.player.setDebuggingState(true);
-			for (int i = 0; i < game.asteroids.size(); i++)
+		
+		case SDL_SCANCODE_F: //The F key activates and disables debugging mode
+			game.player_.ChangeDebuggingState();
+			for (int i = 0; i < game.asteroids_.size(); i++)
 			{
-				game.asteroids[i].setDebuggingState(true);
+				game.asteroids_[i].ChangeDebuggingState();
 			}
 			break;
 		default:			
@@ -111,20 +115,14 @@ namespace Engine
 
 	void App::OnKeyUp(SDL_KeyboardEvent keyBoardEvent)
 	{
+		//[WIP] missing game input manager 
 		switch (keyBoardEvent.keysym.scancode)
 		{
 		case SDL_SCANCODE_ESCAPE:
 			OnExit();
 			break;
 		case SDL_SCANCODE_W:
-			game.player.SetMovingForwardState(false);
-			break;
-		case SDL_SCANCODE_F:
-			game.player.setDebuggingState(false);
-			for (int i = 0; i < game.asteroids.size(); i++)
-			{
-				game.asteroids[i].setDebuggingState(false);
-			}
+			game.player_.SetMovingForwardState(false);
 			break;
 		default:
 			//DO NOTHING
