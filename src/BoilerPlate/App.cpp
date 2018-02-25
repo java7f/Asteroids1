@@ -19,6 +19,7 @@ namespace Engine
 		, m_timer(new TimeManager)
 		, m_mainWindow(nullptr)
 	{
+		PushAsteroids();
 		m_state = GameState::UNINITIALIZED;
 		m_lastFrameTime = m_timer->GetElapsedTimeInSeconds();
 	}
@@ -90,6 +91,8 @@ namespace Engine
 		case SDL_SCANCODE_D:
 			player.RotateRight();
 			break;
+		case SDL_SCANCODE_Q:
+			asteroids.push_back(Asteroid(Asteroid::BIG));
 		default:			
 			SDL_Log("%S was pressed.", keyBoardEvent.keysym.scancode);
 			break;
@@ -116,7 +119,16 @@ namespace Engine
 	{
 		double startTime = m_timer->GetElapsedTimeInSeconds();
 
+		player.UpdateFrameData(m_height, m_width);
+		perra.UpdateFrameData(m_height, m_width);
 		// Update code goes here
+		player.Update(DESIRED_FRAME_TIME);
+		for (int i = 0; i < asteroids.size(); i++)
+		{
+			asteroids[i].UpdateFrameData(m_height, m_width);
+			asteroids[i].Update(DESIRED_FRAME_TIME);
+		}
+		perra.Update(DESIRED_FRAME_TIME);
 		//
 
 		double endTime = m_timer->GetElapsedTimeInSeconds();
@@ -135,13 +147,25 @@ namespace Engine
 		m_nUpdates++;
 	}
 
+	void App::PushAsteroids()
+	{
+		for (int i = 0; i < 10; i++)
+		{
+			asteroids.push_back(Asteroid(Asteroid::BIG));
+		}
+	}
+
 	void App::Render()
 	{
 		player.Render();
-		asteroid.Render();
-		player.UpdateFrameData(m_height, m_width);
+		for (int i = 0; i < asteroids.size(); i++)
+		{
+			asteroids[i].Render();
+		}
+		perra.Render();
 		SDL_GL_SwapWindow(m_mainWindow);
 	}
+
 
 	bool App::SDLInit()
 	{
@@ -238,8 +262,6 @@ namespace Engine
 		//
 		m_width = width;
 		m_height = height;
-
-		player.UpdateFrameData(m_height, m_width);
 
 		SetupViewport();
 	}

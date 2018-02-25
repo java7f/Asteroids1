@@ -43,6 +43,7 @@ namespace Engine
 		bool Init							( );
 		void Update							( );
 		void Render							( );
+		void PushAsteroids();
 	private:
 		/* =============================================================
 		 * PRIVATE FUNCTIONS
@@ -70,9 +71,9 @@ namespace Engine
 		GameState::State					m_state;
 		Engine::TimeManager*				m_timer;
 
-		Player player = Player();
-		Asteroid asteroid = Asteroid(asteroid.SMALL);
-
+		Player player;
+		vector<Asteroid> asteroids;
+		Asteroid perra = Asteroid(perra.SMALL);
 	};
 }
 #endif /* GAME_HPP */
