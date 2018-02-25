@@ -9,7 +9,7 @@ public:
 	~Palette();
 	
 	//this functions return a selected color 
-	Color getYellow();
+	Color getMaroon();
 	Color getPurple();
 	Color getNavy();
 	Color getGray();
@@ -17,7 +17,7 @@ public:
 
 private:
 	//Colors that will be available
-	Color yellow;
+	Color maroon;
 	Color purple;
 	Color navy;
 	Color gray;

@@ -23,6 +23,7 @@ public:
 	void DrawEntity() override;
 	void EntityImpulse() override;
 	void PushEntityVertices() override;
+	void DebuggingHitBox() override;
 	AsteroidSize getSize();
 
 private:

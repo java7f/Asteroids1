@@ -12,6 +12,7 @@ Player::Player()
 	isMovingForward = false;
 	rotationAngle = 0;
 	mass_ = 0.98;
+	radius_ = 25;
 	mathTools_ = MathUtilities();
 }
 
@@ -39,12 +40,14 @@ void Player::Update(double deltaTime)
 void Player::Render()
 {
 	Palette colorPalette = Palette();
-	Color background = colorPalette.getPurple();
+	Color background = colorPalette.getMaroon();
 	glClearColor(background.getRedValue(), background.getGreenValue(), background.getBlueValue(), background.getOpacityValue());
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	PushEntityVertices();
 	DrawEntity();
+	if(isDebugging)
+		DebuggingHitBox();
 	shipContainer_.clear();
 	thrusterContainer_.clear();
 }
@@ -120,5 +123,19 @@ void Player::PushEntityVertices()
 	thrusterContainer_.push_back(Vector2(9, -6));
 	thrusterContainer_.push_back(Vector2(0, -18));
 }
+
+void Player::DebuggingHitBox()
+{
+	int numbersOfLines = 500;
+	glLoadIdentity();
+
+	glBegin(GL_LINE_LOOP);
+	for (int i = 0; i <= numbersOfLines; i++) 
+	{
+		glVertex2d(position_.x + (radius_ * cos(i *  (2*mathTools_.PI / numbersOfLines))), position_.y + (radius_* sin(i * 2*mathTools_.PI / numbersOfLines)));
+	}
+	glEnd();
+}
+
 
 

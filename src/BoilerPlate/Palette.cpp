@@ -4,7 +4,7 @@
 Palette::Palette()
 {
 	//initialization of the colors using the respective values 
-	yellow = Color(1.000f, 1.000f, 0.000f, 1.0f);
+	maroon = Color(0.502f, 0.000f, 0.000f, 1.0f);
 	purple = Color(0.502f, 0.000f, 0.502f, 1.0f);
 	navy = Color(0.000f, 0.000f, 0.502f, 1.0f);
 	gray = Color(0.439f, 0.502f, 0.565f, 1.0f);
@@ -16,9 +16,9 @@ Palette::~Palette()
 {
 }
 
-Color Palette::getYellow()
+Color Palette::getMaroon()
 {
-	return yellow;
+	return maroon;
 }
 
 Color Palette::getPurple()

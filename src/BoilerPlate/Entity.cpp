@@ -1,7 +1,5 @@
 #include "Entity.hpp"
 
-
-
 Entity::Entity()
 {
 	//Position of the player is set to origin
@@ -14,6 +12,7 @@ Entity::Entity()
 
 	mass_ = 0;
 	rotationAngle = 0;
+	isDebugging = false;
 }
 
 
@@ -69,4 +68,28 @@ void Entity::EntityImpulse()
 
 void Entity::PushEntityVertices()
 {
+}
+
+void Entity::DebuggingHitBox()
+{
+}
+
+void Entity::setDebuggingState(bool state)
+{
+	isDebugging = state;
+}
+
+Vector2 Entity::getPosition()
+{
+	return position_;
+}
+
+bool Entity::getDebuggingStatus()
+{
+	return isDebugging;
+}
+
+double Entity::getRadius()
+{
+	return radius_;
 }

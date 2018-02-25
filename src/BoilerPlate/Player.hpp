@@ -18,6 +18,7 @@ public:
 	void SetMovingForwardState(bool);
 	void EntityImpulse() override;
 	void PushEntityVertices() override;
+	void DebuggingHitBox() override;
 
 private:
 	//Members

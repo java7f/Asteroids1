@@ -2,6 +2,7 @@
 #include <iostream>
 #include "Palette.hpp"
 #include <cmath>
+#include <time.h>
 // OpenGL includes
 #include <GL/glew.h>
 #include <SDL2/SDL_opengl.h>
@@ -10,13 +11,14 @@ const double IMPULSE_ANGLE = 100;
 
 Asteroid::Asteroid(AsteroidSize size)
 {
-	position_ = Vector2(rand()%800, rand()%800);
+	position_ = Vector2(rand()%1000, rand()%1000);
 	velocity_ = Vector2(0, 0);
 	mathTools_ = MathUtilities();
 	mass_ = 0.87;
 	rotationAngle = 0;
 	size_ = size;
 	rotationFactor = 120;
+	radius_ = 15*size_;
 }
 
 Asteroid::~Asteroid()
@@ -38,6 +40,19 @@ void Asteroid::PushEntityVertices()
 	asteroidContainer_.push_back(Vector2(-13.6 * size_, -3.1 * size_));
 }
 
+void Asteroid::DebuggingHitBox()
+{
+	int numbersOfLines = 500;
+	glLoadIdentity();
+
+	glBegin(GL_LINE_LOOP);
+	for (int i = 0; i <= numbersOfLines; i++) 
+	{
+		glVertex2d(position_.x + (radius_ * cos(i *  (2 * mathTools_.PI / numbersOfLines))), position_.y + (radius_* sin(i * 2 * mathTools_.PI / numbersOfLines)));
+	}
+	glEnd();
+}
+
 void Asteroid::Update(double deltaTime)
 {
 	rotationAngle += rotationFactor * deltaTime;
@@ -52,6 +67,8 @@ void Asteroid::Render()
 	glRotated(rotationAngle, 0.0, 0.0, 1.0);
 	PushEntityVertices();
 	DrawEntity();
+	if(isDebugging)
+		DebuggingHitBox();
 	asteroidContainer_.clear();
 }
 
@@ -68,6 +85,7 @@ void Asteroid::DrawEntity()
 void Asteroid::EntityImpulse()
 {
 	double moveValue = 50;
-	velocity_.x = (moveValue)* sin(mathTools_.ToRadians(500));
-	velocity_.y = (moveValue)* cos(mathTools_.ToRadians(500));
+	double moveAngle = rand() % 500;
+	velocity_.x = (moveValue)* sin(mathTools_.ToRadians(moveAngle));
+	velocity_.y = (moveValue)* cos(mathTools_.ToRadians(moveValue));
 }

@@ -19,7 +19,6 @@ namespace Engine
 		, m_timer(new TimeManager)
 		, m_mainWindow(nullptr)
 	{
-		PushAsteroids();
 		m_state = GameState::UNINITIALIZED;
 		m_lastFrameTime = m_timer->GetElapsedTimeInSeconds();
 	}
@@ -82,17 +81,28 @@ namespace Engine
 		switch (keyBoardEvent.keysym.scancode)
 		{
 		case SDL_SCANCODE_W:
-			player.MoveForward();
-			player.SetMovingForwardState(true);
+			game.player.MoveForward();
+			game.player.SetMovingForwardState(true);
 			break;
 		case SDL_SCANCODE_A:
-			player.RotateLeft();
+			game.player.RotateLeft();
 			break;
 		case SDL_SCANCODE_D:
-			player.RotateRight();
+			game.player.RotateRight();
 			break;
 		case SDL_SCANCODE_Q:
-			asteroids.push_back(Asteroid(Asteroid::BIG));
+			game.asteroids.push_back(Asteroid(Asteroid::BIG));
+			break;
+		case SDL_SCANCODE_E:
+			game.asteroids.pop_back();
+			break;
+		case SDL_SCANCODE_F:
+			game.player.setDebuggingState(true);
+			for (int i = 0; i < game.asteroids.size(); i++)
+			{
+				game.asteroids[i].setDebuggingState(true);
+			}
+			break;
 		default:			
 			SDL_Log("%S was pressed.", keyBoardEvent.keysym.scancode);
 			break;
@@ -107,7 +117,14 @@ namespace Engine
 			OnExit();
 			break;
 		case SDL_SCANCODE_W:
-			player.SetMovingForwardState(false);
+			game.player.SetMovingForwardState(false);
+			break;
+		case SDL_SCANCODE_F:
+			game.player.setDebuggingState(false);
+			for (int i = 0; i < game.asteroids.size(); i++)
+			{
+				game.asteroids[i].setDebuggingState(false);
+			}
 			break;
 		default:
 			//DO NOTHING
@@ -119,16 +136,8 @@ namespace Engine
 	{
 		double startTime = m_timer->GetElapsedTimeInSeconds();
 
-		player.UpdateFrameData(m_height, m_width);
-		perra.UpdateFrameData(m_height, m_width);
 		// Update code goes here
-		player.Update(DESIRED_FRAME_TIME);
-		for (int i = 0; i < asteroids.size(); i++)
-		{
-			asteroids[i].UpdateFrameData(m_height, m_width);
-			asteroids[i].Update(DESIRED_FRAME_TIME);
-		}
-		perra.Update(DESIRED_FRAME_TIME);
+		game.UpdateGame(DESIRED_FRAME_TIME, m_height, m_width);
 		//
 
 		double endTime = m_timer->GetElapsedTimeInSeconds();
@@ -147,22 +156,10 @@ namespace Engine
 		m_nUpdates++;
 	}
 
-	void App::PushAsteroids()
-	{
-		for (int i = 0; i < 10; i++)
-		{
-			asteroids.push_back(Asteroid(Asteroid::BIG));
-		}
-	}
 
 	void App::Render()
 	{
-		player.Render();
-		for (int i = 0; i < asteroids.size(); i++)
-		{
-			asteroids[i].Render();
-		}
-		perra.Render();
+		game.RenderGame();
 		SDL_GL_SwapWindow(m_mainWindow);
 	}
 

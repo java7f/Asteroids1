@@ -1,6 +1,10 @@
 #pragma once
 #include "Vector2.hpp"
 #include "MathUtilities.hpp"
+// OpenGL includes
+#include <GL/glew.h>
+#include <SDL2/SDL_opengl.h>
+
 class Entity
 {
 public:
@@ -16,6 +20,11 @@ public:
 	virtual void UpdateFrameData(int, int);
 	virtual void EntityImpulse();
 	virtual void PushEntityVertices();
+	virtual void DebuggingHitBox();
+	virtual void setDebuggingState(bool);
+	virtual Vector2 getPosition();
+	virtual bool getDebuggingStatus();
+	virtual double getRadius();
 
 protected:
 	//Members
@@ -27,5 +36,6 @@ protected:
 	int frameWidth_;
 	double radius_;
 	double rotationAngle;
+	bool isDebugging;
 };
 
