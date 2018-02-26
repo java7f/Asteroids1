@@ -70,6 +70,7 @@ void Game::DebuggingLine()
 
 	radiusForMeasurement = 2 * player_.GetRadius();
 
+
 	if (player_.GetDebuggingStatus())
 	{
 		shipX = player_.GetPosition().x;
@@ -90,8 +91,27 @@ void Game::DebuggingLine()
 			}
 		}
 		glEnd();
+
+		glBegin(GL_LINE_LOOP);
+		for (int i = 0; i < asteroids_.size(); i++)
+		{
+			asteroidX = asteroids_[i].GetPosition().x;
+			asteroidY = asteroids_[i].GetPosition().y;
+			for (int j = 0; j < playerBullets_.size(); j++)
+			{
+				bulletX = playerBullets_[j].GetPosition().x;
+				bulletY = playerBullets_[j].GetPosition().y;
+				radiusForMeasurement = 2 * playerBullets_[j].GetRadius();
+				distanceToAsteroid = mathTools_.DistanceBetweenTwoPoints(bulletX, bulletY, asteroidX, asteroidY);
+				if (distanceToAsteroid <= radiusForMeasurement + asteroids_[i].GetRadius())
+				{
+					glVertex2d(bulletX, bulletY);
+					glVertex2d(asteroidX, asteroidY);
+				}
+			}
+		}
+		glEnd();
 	}
-	
 }
 
 //Creates initial asteroids
