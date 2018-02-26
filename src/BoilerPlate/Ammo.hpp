@@ -19,7 +19,7 @@ public:
 
 	//Members
 	Entity player_;
-	vector<Vector2> bulletContainer_;
+	std::vector<Vector2> bulletContainer_;
 	double bulletLife;
 };
 

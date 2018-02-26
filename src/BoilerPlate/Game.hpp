@@ -32,8 +32,8 @@ private:
 
 	//Members
 	Player player_;
-	vector<Asteroid> asteroids_;
-	vector<Ammo> playerBullets_;
+	std::vector<Asteroid> asteroids_;
+	std::vector<Ammo> playerBullets_;
 	MathUtilities mathTools_;
 };
 

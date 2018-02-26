@@ -2,7 +2,6 @@
 #include <vector>
 #include <algorithm>
 #include <math.h>
-using namespace std;
 
 //Class that contains different math functions
 class MathUtilities

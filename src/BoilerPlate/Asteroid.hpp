@@ -30,7 +30,7 @@ public:
 private:
 	//Members
 	AsteroidSize size_;
-	vector<Vector2> asteroidContainer_;
+	std::vector<Vector2> asteroidContainer_;
 	//Attributes
 	double rotationFactor;
 	double moveAngle;

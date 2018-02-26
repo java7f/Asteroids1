@@ -23,8 +23,8 @@ public:
 
 private:
 	//Members
-	vector<Vector2> shipContainer_;
-	vector<Vector2> thrusterContainer_;
+	std::vector<Vector2> shipContainer_;
+	std::vector<Vector2> thrusterContainer_;
 
 	//Attributes
 	bool isMovingForward;
