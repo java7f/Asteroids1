@@ -15,6 +15,7 @@ public:
 
 	//Constructors
 	Asteroid(AsteroidSize);
+	Asteroid(AsteroidSize, Asteroid);
 	~Asteroid();
 
 	//Public functions

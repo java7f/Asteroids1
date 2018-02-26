@@ -45,7 +45,7 @@ namespace Engine
 			//
 			while (SDL_PollEvent(&event))
 			{
-				OnEvent(&event);
+ 				OnEvent(&event);
 			}
 
 			//
@@ -93,19 +93,17 @@ namespace Engine
 			break;
 
 		case SDL_SCANCODE_Q: //The Q key adds more asteroids
-			game.asteroids_.push_back(Asteroid(Asteroid::SMALL));
+			game.AddAsteroids();
 			break;
 		case SDL_SCANCODE_E: //The E key eliminates the asteroids 
-			if(game.asteroids_.size()>0)
-				game.asteroids_.pop_back();
+			game.DeleteAsteroids();
 			break;
 		
 		case SDL_SCANCODE_F: //The F key activates and disables debugging mode
-			game.player_.ChangeDebuggingState();
-			for (int i = 0; i < game.asteroids_.size(); i++)
-			{
-				game.asteroids_[i].ChangeDebuggingState();
-			}
+			game.DebuggingModeToggle();
+			break;
+		case SDL_SCANCODE_SPACE:
+			game.AddBullets();
 			break;
 		default:			
 			SDL_Log("%S was pressed.", keyBoardEvent.keysym.scancode);

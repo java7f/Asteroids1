@@ -25,6 +25,22 @@ Asteroid::Asteroid(AsteroidSize size)
 	moveValue = 50;
 }
 
+Asteroid::Asteroid(AsteroidSize size, Asteroid asteroid)
+{
+	position_ = Vector2(asteroid.GetPosition().x, asteroid.GetPosition().y);
+	velocity_ = Vector2(0, 0);
+
+	mathTools_ = MathUtilities();
+	mass_ = 1.25;
+	rotationAngle = 0;
+	size_ = size;
+	rotationFactor = 120;
+	radius_ = 15 * size_;
+
+	moveAngle = rand();
+	moveValue = 50;
+}
+
 Asteroid::~Asteroid()
 {
 }
@@ -59,6 +75,11 @@ void Asteroid::DebuggingHitBox()
 	glEnd();
 }
 
+Asteroid::AsteroidSize Asteroid::GetSize()
+{
+	return size_;
+}
+
 void Asteroid::Update(double deltaTime)
 {
 	//Changes the rotation angle
@@ -69,9 +90,6 @@ void Asteroid::Update(double deltaTime)
 
 void Asteroid::Render()
 {
-	glLoadIdentity();
-	glTranslated(position_.x, position_.y, 0.0);
-	glRotated(rotationAngle, 0.0, 0.0, 1.0);
 	PushEntityVertices();
 	DrawEntity();
 
@@ -86,6 +104,9 @@ void Asteroid::Render()
 //draws the asteroid
 void Asteroid::DrawEntity()
 {
+	glLoadIdentity();
+	glTranslated(position_.x, position_.y, 0.0);
+	glRotated(rotationAngle, 0.0, 0.0, 1.0);
 	glBegin(GL_LINE_LOOP);
 	for (int i=0; i< asteroidContainer_.size(); i++)
 	{

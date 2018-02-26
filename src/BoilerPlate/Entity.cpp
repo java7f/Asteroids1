@@ -15,6 +15,7 @@ Entity::Entity()
 	isDebugging_ = false;
 
 	moveValue = 0;
+	isAlive = true;
 }
 
 
@@ -101,4 +102,19 @@ bool Entity::GetDebuggingStatus()
 double Entity::GetRadius()
 {
 	return radius_;
+}
+
+void Entity::SetCollisionState(bool boolValue)
+{
+	isAlive = boolValue;
+}
+
+double Entity::GetRotationAngle()
+{
+	return rotationAngle;
+}
+
+bool Entity::GetAliveStatus()
+{
+	return isAlive;
 }

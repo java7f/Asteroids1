@@ -16,6 +16,7 @@
     <ClCompile Include="Asteroid.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Ammo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.hpp" />
@@ -31,6 +32,7 @@
     <ClInclude Include="Palette.hpp" />
     <ClInclude Include="Color.hpp" />
     <ClInclude Include="Game.hpp" />
+    <ClInclude Include="Ammo.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">

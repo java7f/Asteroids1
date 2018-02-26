@@ -55,21 +55,28 @@ void Player::Render()
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	PushEntityVertices();
-	DrawEntity();
 
-	//Decides id the hit box shows or not
-	if(isDebugging_)
+	if(isAlive)
+	{
+		DrawEntity();
+
+		//Draws the hit box
 		DebuggingHitBox();
 
-	//Cleaning up the vectors 
-	shipContainer_.clear();
-	thrusterContainer_.clear();
+		//Cleaning up the vectors 
+		shipContainer_.clear();
+		thrusterContainer_.clear();
+	}
+	else if (!isAlive && isDebugging_)
+	{
+		DrawEntity();
+		DebuggingHitBox();
+	}
 }
 
 //Hides the process of drawing the ship 
 void Player::DrawEntity()
 {
-
 	glLoadIdentity();
 	glTranslated(position_.x, position_.y, 0.0);
 	glRotated(rotationAngle, 0.0, 0.0, 1.0);
@@ -120,8 +127,11 @@ void Player::SetMovingForwardState(bool isWPressed)
 //Increments velocity
 void Player::EntityImpulse()
 {
-	velocity_.x -= (moveValue/mass_) * sin(mathTools_.ToRadians(rotationAngle));
-	velocity_.y += (moveValue/mass_) * cos(mathTools_.ToRadians(rotationAngle));
+	if (mass_ > 0) 
+	{
+		velocity_.x -= (moveValue / mass_) * sin(mathTools_.ToRadians(rotationAngle));
+		velocity_.y += (moveValue / mass_) * cos(mathTools_.ToRadians(rotationAngle));
+	}
 }
 
 //Saves the ship and the thruster data
@@ -141,15 +151,24 @@ void Player::PushEntityVertices()
 //Draws the hit box 
 void Player::DebuggingHitBox()
 {
-	int numbersOfLines = 500;
-	glLoadIdentity();
-
-	glBegin(GL_LINE_LOOP);
-	for (int i = 0; i <= numbersOfLines; i++) 
+	if (isDebugging_) 
 	{
-		glVertex2d(position_.x + (radius_ * cos(i *  (2*mathTools_.PI / numbersOfLines))), position_.y + (radius_* sin(i * 2*mathTools_.PI / numbersOfLines)));
+		int numbersOfLines = 500;
+		glLoadIdentity();
+		glBegin(GL_LINE_LOOP);
+		for (int i = 0; i <= numbersOfLines; i++)
+		{
+			glVertex2d(position_.x + (radius_ * cos(i *  (2 * mathTools_.PI / numbersOfLines))), position_.y + (radius_* sin(i * 2 * mathTools_.PI / numbersOfLines)));
+		}
+		glEnd();
 	}
-	glEnd();
+}
+
+void Player::PlayerRespawn()
+{
+	position_ = Vector2(0, 0);
+	velocity_ = Vector2(0, 0);
+	isAlive = true;
 }
 
 

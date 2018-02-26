@@ -19,6 +19,7 @@ public:
 	void EntityImpulse() override;
 	void PushEntityVertices() override;
 	void DebuggingHitBox() override;
+	void PlayerRespawn();
 
 private:
 	//Members
