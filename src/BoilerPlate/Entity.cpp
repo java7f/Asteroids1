@@ -104,7 +104,7 @@ double Entity::GetRadius()
 	return radius_;
 }
 
-void Entity::SetCollisionState(bool boolValue)
+void Entity::SetAliveState(bool boolValue)
 {
 	isAlive = boolValue;
 }

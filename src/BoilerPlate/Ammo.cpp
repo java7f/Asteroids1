@@ -84,6 +84,6 @@ void Ammo::DebuggingHitBox()
 
 void Ammo::BulletPosition()
 {
-	position_.x = player_.GetPosition().x + ((cos(player_.GetRotationAngle())) * sin(mathTools_.ToRadians(player_.GetRotationAngle())));
-	position_.y = player_.GetPosition().y + ((sin(player_.GetRotationAngle())) * cos(mathTools_.ToRadians(player_.GetRotationAngle())));
+	position_.x = player_.GetPosition().x + (player_.GetRadius() * -sin(mathTools_.ToRadians(player_.GetRotationAngle())));
+	position_.y = player_.GetPosition().y + (player_.GetRadius() * cos(mathTools_.ToRadians(player_.GetRotationAngle())));
 }

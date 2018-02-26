@@ -21,6 +21,7 @@ Player::Player()
 	mathTools_ = MathUtilities();
 
 	moveValue = 10;
+	isAlive = true;
 }
 
 Player::~Player()

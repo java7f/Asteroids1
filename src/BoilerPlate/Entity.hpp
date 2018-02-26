@@ -25,7 +25,7 @@ public:
 	virtual Vector2 GetPosition();
 	virtual bool GetDebuggingStatus();
 	virtual double GetRadius();
-	virtual void SetCollisionState(bool);
+	virtual void SetAliveState(bool);
 	double GetRotationAngle();
 	virtual bool GetAliveStatus();
 

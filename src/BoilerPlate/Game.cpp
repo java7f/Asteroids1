@@ -94,35 +94,29 @@ void Game::PushAsteroids()
 {
 	for (int i = 0; i < 10; i++)
 	{
-		asteroids_.push_back(Asteroid(Asteroid::MEDIUM));
+		asteroids_.push_back(Asteroid(Asteroid::BIG));
 
 	}
 }
 
-void Game::AddBullets()
+void Game::ShootBullets()
 {
-	if (!player_.GetDebuggingStatus()) 
+	if (player_.GetAliveStatus() && playerBullets_.size() < 5)
 	{
 		Ammo newBullet = Ammo(player_);
+		if (player_.GetDebuggingStatus())
+			newBullet.ChangeDebuggingState();
 		playerBullets_.push_back(newBullet);
-
 	}
 }
 
 void Game::PlayerCollision()
 {
-	shipX = player_.GetPosition().x;
-	shipY = player_.GetPosition().y;
 	for (int i = 0; i < asteroids_.size(); i++)
 	{
-		asteroidX = asteroids_[i].GetPosition().x;
-		asteroidY = asteroids_[i].GetPosition().y;
-
-		distanceToAsteroid = mathTools_.DistanceBetweenTwoPoints(shipX, shipY, asteroidX, asteroidY);
-
-		if (distanceToAsteroid <= (player_.GetRadius() + asteroids_[i].GetRadius()))
+		if (CollidingDetection(player_, asteroids_[i]) && !player_.GetDebuggingStatus())
 		{
-			player_.SetCollisionState(false);
+			player_.SetAliveState(false);
 		}
 	}
 }
@@ -130,18 +124,12 @@ void Game::PlayerCollision()
 void Game::BulletCollision()
 {
 	bool ifCollision = false;
+
 	for (int i = 0; i < asteroids_.size(); i++)
 	{
-		asteroidX = asteroids_[i].GetPosition().x;
-		asteroidY = asteroids_[i].GetPosition().y;
 		for (int j = 0; j < playerBullets_.size(); j++)
 		{
-			bulletX = playerBullets_[j].GetPosition().x; 
-			bulletY = playerBullets_[j].GetPosition().y;
-
-			distanceToAsteroid = mathTools_.DistanceBetweenTwoPoints(bulletX, bulletY, asteroidX, asteroidY);
-
-			if (distanceToAsteroid <= (playerBullets_[j].GetRadius() + asteroids_[i].GetRadius()))
+			if (CollidingDetection(asteroids_[i], playerBullets_[j]))
 			{
 				if (asteroids_[i].GetSize() == Asteroid::BIG)
 				{
@@ -157,7 +145,7 @@ void Game::BulletCollision()
 					asteroids_.push_back(Asteroid(Asteroid::SMALL, asteroids_[i]));
 					asteroids_.erase(asteroids_.begin() + i);
 					playerBullets_.erase(playerBullets_.begin() + j);
-					ifCollision = true;;
+					ifCollision = true;
 				}
 				else
 				{
@@ -192,8 +180,10 @@ void Game::DeleteAsteroids()
 
 void Game::DebuggingModeToggle()
 {
-	player_.PlayerRespawn();
+	if(!player_.GetAliveStatus())
+		player_.PlayerRespawn();
 	player_.ChangeDebuggingState();	
+	player_.SetAliveState(true);
 	for (int i = 0; i < asteroids_.size(); i++)
 	{
 		asteroids_[i].ChangeDebuggingState();
@@ -202,4 +192,26 @@ void Game::DebuggingModeToggle()
 	{
 		playerBullets_[i].ChangeDebuggingState();
 	}
+}
+
+bool Game::CollidingDetection(Entity firstEntity, Entity secondEntity)
+{
+	Vector2 first = firstEntity.GetPosition();
+	Vector2 second = secondEntity.GetPosition();
+
+	distanceToAsteroid = mathTools_.DistanceBetweenTwoPoints(first.x, first.y, second.x, second.y);
+
+	if (distanceToAsteroid <= (firstEntity.GetRadius() + secondEntity.GetRadius()))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+void Game::InputManager()
+{
+
 }

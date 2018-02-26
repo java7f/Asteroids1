@@ -103,7 +103,7 @@ namespace Engine
 			game.DebuggingModeToggle();
 			break;
 		case SDL_SCANCODE_SPACE:
-			game.AddBullets();
+			game.ShootBullets();
 			break;
 		default:			
 			SDL_Log("%S was pressed.", keyBoardEvent.keysym.scancode);

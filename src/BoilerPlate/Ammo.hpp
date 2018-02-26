@@ -4,9 +4,11 @@
 class Ammo : public Entity
 {
 public:
+	//Constructors
 	Ammo(Entity);
 	~Ammo();
 
+	//Functions
 	void Update(Entity, double);
 	void Render() override;
 	void DrawEntity() override;
@@ -15,6 +17,7 @@ public:
 	void DebuggingHitBox() override;
 	void BulletPosition();
 
+	//Members
 	Entity player_;
 	vector<Vector2> bulletContainer_;
 	double bulletLife;
