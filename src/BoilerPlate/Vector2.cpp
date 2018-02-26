@@ -24,7 +24,9 @@ Vector2::Vector2(double value)
 
 double Vector2::Module()
 {
-	return std::sqrt((x*x) + (y*y));
+	double value= std::sqrt((x*x) + (y*y));
+	module = value;
+	return value;
 }
 
 double Vector2::SquaredLenght()

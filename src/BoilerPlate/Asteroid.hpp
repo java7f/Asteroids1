@@ -1,5 +1,4 @@
 #pragma once
-#include "MathUtilities.hpp"
 #include "Entity.hpp"
 
 class Asteroid : public Entity
@@ -15,18 +14,25 @@ public:
 	};
 
 	//Constructors
-	Asteroid(AsteroidSize size);
+	Asteroid(AsteroidSize);
+	Asteroid(AsteroidSize, Asteroid);
 	~Asteroid();
 
 	//Public functions
-	void Update() override;
+	void Update(double) override;
 	void Render() override;
 	void DrawEntity() override;
-	AsteroidSize getSize();
+	void EntityImpulse() override;
+	void PushEntityVertices() override;
+	void DebuggingHitBox() override;
+	AsteroidSize GetSize();
 
 private:
 	//Members
 	AsteroidSize size_;
-	vector<Vector2> asteroidContainer_;
+	std::vector<Vector2> asteroidContainer_;
+	//Attributes
+	double rotationFactor;
+	double moveAngle;
 };
 
