@@ -8,10 +8,11 @@
 #include <SDL2/SDL_opengl.h>
 
 const double IMPULSE_ANGLE = 100;
+const int SPAWN_RANGE_LIMIT = 800;
 
 Asteroid::Asteroid(AsteroidSize size)
 {
-	position_ = Vector2(rand()%800, rand()%800);
+	position_ = Vector2(rand()%SPAWN_RANGE_LIMIT, rand()%SPAWN_RANGE_LIMIT);
 	velocity_ = Vector2(0, 0);
 
 	mathTools_ = MathUtilities();

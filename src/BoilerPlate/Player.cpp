@@ -5,7 +5,7 @@
 #include <GL/glew.h>
 #include <SDL2/SDL_opengl.h>
 
-const double MAX_SPEED = 500;
+const double MAX_SPEED = 300;
 const double FRICTION = 0.98;
 
 Player::Player()
@@ -110,13 +110,13 @@ void Player::MoveForward()
 //Increments the rotation angle
 void Player::RotateLeft()
 {
-	rotationAngle += 15;
+	rotationAngle += 5;
 }
 
 //Minimizes the rotation angle
 void Player::RotateRight()
 {
-	rotationAngle -= 15;
+	rotationAngle -= 5;
 }
 
 //changes if the key that makes the ship move forward is pressed

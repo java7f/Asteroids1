@@ -2,6 +2,7 @@
 #include "Player.hpp"
 #include "Asteroid.hpp"
 #include "Ammo.hpp"
+#include "InputManager.hpp"
 #include <iostream>
 class Game
 {
@@ -23,33 +24,16 @@ public:
 	void DeleteAsteroids();
 	void DebuggingModeToggle();
 	bool CollidingDetection(Entity, Entity);
-	void InputManager();
-
-	bool GetKeyW();
-	bool GetKeyA();
-	bool GetKeyD();
-	bool GetKeyF();
-	bool GetKeyQ();
-	bool GetKeyE();
-
-	void SetKeyW();
-	void SetKeyA();
-	void SetKeyD();
-	void SetKeyF();
-	void SetKeyQ();
-	void SetKeyE();
+	void GameInputManager();
+	Player GetPlayer();
+	InputManager inputManger;
 
 private:
+
 	//Members
 	Player player_;
 	vector<Asteroid> asteroids_;
 	vector<Ammo> playerBullets_;
 	MathUtilities mathTools_;
-	bool keyW;
-	bool keyA;
-	bool keyD;
-	bool keyF;
-	bool keyQ;
-	bool keyE;
 };
 

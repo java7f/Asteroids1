@@ -55,8 +55,12 @@ void Game::UpdateGame(double DESIRED_FRAME_TIME, double m_height, double m_width
 			playerBullets_.erase(playerBullets_.begin() + i);
 	}
 
+	//Checking collisions
 	PlayerCollision();
 	BulletCollision();
+
+	//Manages input
+	GameInputManager();
 }
 
 //Draws a line between the player and the asteroids close to it
@@ -90,15 +94,17 @@ void Game::DebuggingLine()
 	
 }
 
+//Creates initial asteroids
 void Game::PushAsteroids()
 {
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 7; i++)
 	{
 		asteroids_.push_back(Asteroid(Asteroid::BIG));
 
 	}
 }
 
+//Shooting the bullets
 void Game::ShootBullets()
 {
 	if (player_.GetAliveStatus() && playerBullets_.size() < 5)
@@ -110,6 +116,7 @@ void Game::ShootBullets()
 	}
 }
 
+//Controls the collision between the ship and asteroids
 void Game::PlayerCollision()
 {
 	for (int i = 0; i < asteroids_.size(); i++)
@@ -121,46 +128,61 @@ void Game::PlayerCollision()
 	}
 }
 
+//Controls the collision between the bullet and asteroids
 void Game::BulletCollision()
 {
-	bool ifCollision = false;
+	if (!player_.GetDebuggingStatus()) {
+		bool ifCollision = false;
 
-	for (int i = 0; i < asteroids_.size(); i++)
-	{
-		for (int j = 0; j < playerBullets_.size(); j++)
+		for (int i = 0; i < asteroids_.size(); i++)
 		{
-			if (CollidingDetection(asteroids_[i], playerBullets_[j]))
+			for (int j = 0; j < playerBullets_.size(); j++)
 			{
-				if (asteroids_[i].GetSize() == Asteroid::BIG)
+				if (CollidingDetection(asteroids_[i], playerBullets_[j]))
 				{
-					asteroids_.push_back(Asteroid(Asteroid::MEDIUM, asteroids_[i]));
-					asteroids_.push_back(Asteroid(Asteroid::MEDIUM, asteroids_[i]));
-					asteroids_.erase(asteroids_.begin() + i);
-					playerBullets_.erase(playerBullets_.begin() + j);
-					ifCollision = true;
+					//Checking the size of the asteroid and splitting them
+					if (asteroids_[i].GetSize() == Asteroid::BIG)
+					{
+						asteroids_.push_back(Asteroid(Asteroid::MEDIUM, asteroids_[i]));
+						asteroids_.push_back(Asteroid(Asteroid::MEDIUM, asteroids_[i]));
+						if (player_.GetDebuggingStatus())
+						{
+							asteroids_.at(asteroids_.size() - 1).ChangeDebuggingState();
+							asteroids_.at(asteroids_.size() - 2).ChangeDebuggingState();
+						}
+						asteroids_.erase(asteroids_.begin() + i);
+						playerBullets_.erase(playerBullets_.begin() + j);
+						ifCollision = true;
+					}
+					else if (asteroids_[i].GetSize() == Asteroid::MEDIUM)
+					{
+						asteroids_.push_back(Asteroid(Asteroid::SMALL, asteroids_[i]));
+						asteroids_.push_back(Asteroid(Asteroid::SMALL, asteroids_[i]));
+						if (player_.GetDebuggingStatus())
+						{
+							asteroids_.at(asteroids_.size() - 1).ChangeDebuggingState();
+							asteroids_.at(asteroids_.size() - 2).ChangeDebuggingState();
+						}
+						asteroids_.erase(asteroids_.begin() + i);
+						playerBullets_.erase(playerBullets_.begin() + j);
+						ifCollision = true;
+					}
+					else
+					{
+						asteroids_.erase(asteroids_.begin() + i);
+						playerBullets_.erase(playerBullets_.begin() + j);
+						ifCollision = true;
+					}
 				}
-				else if (asteroids_[i].GetSize() == Asteroid::MEDIUM)
-				{
-					asteroids_.push_back(Asteroid(Asteroid::SMALL, asteroids_[i]));
-					asteroids_.push_back(Asteroid(Asteroid::SMALL, asteroids_[i]));
-					asteroids_.erase(asteroids_.begin() + i);
-					playerBullets_.erase(playerBullets_.begin() + j);
-					ifCollision = true;
-				}
-				else
-				{
-					asteroids_.erase(asteroids_.begin() + i);
-					playerBullets_.erase(playerBullets_.begin() + j);
-					ifCollision = true;
-				}
+				break;
 			}
-			break;
+			if (ifCollision)
+				break;
 		}
-		if (ifCollision) 
-			break;
 	}
 }
 
+//Creates asteroids in debugging mode
 void Game::AddAsteroids()
 {
 	if (player_.GetDebuggingStatus())
@@ -172,12 +194,14 @@ void Game::AddAsteroids()
 	
 }
 
+//Deletes asteroids in debugging mode
 void Game::DeleteAsteroids()
 {
 	if (asteroids_.size()>0)
 		asteroids_.pop_back();
 }
 
+//Activates or disables the debugging mode
 void Game::DebuggingModeToggle()
 {
 	if(!player_.GetAliveStatus())
@@ -194,6 +218,7 @@ void Game::DebuggingModeToggle()
 	}
 }
 
+//Checks if two entities are colliding
 bool Game::CollidingDetection(Entity firstEntity, Entity secondEntity)
 {
 	Vector2 first = firstEntity.GetPosition();
@@ -211,7 +236,31 @@ bool Game::CollidingDetection(Entity firstEntity, Entity secondEntity)
 	}
 }
 
-void Game::InputManager()
+//Manages the input keys for the game
+void Game::GameInputManager()
 {
+	if (inputManger.GetKeyW())
+	{
+		player_.MoveForward();
+		player_.SetMovingForwardState(true);
+	}
+	else
+	{
+		player_.SetMovingForwardState(false);
+	}
 
+	if(inputManger.GetKeyA())
+	{
+		player_.RotateLeft();
+	}
+
+	if (inputManger.GetKeyD())
+	{
+		player_.RotateRight();
+	}
+}
+
+Player Game::GetPlayer()
+{
+	return player_;
 }

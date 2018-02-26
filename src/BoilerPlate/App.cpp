@@ -82,14 +82,13 @@ namespace Engine
 		switch (keyBoardEvent.keysym.scancode)
 		{
 		case SDL_SCANCODE_W:
-			game.player_.MoveForward();
-			game.player_.SetMovingForwardState(true);
+			game.inputManger.SetKeyW(true);
 			break;
 		case SDL_SCANCODE_A:
-			game.player_.RotateLeft();
+			game.inputManger.SetKeyA(true);
 			break;
 		case SDL_SCANCODE_D:
-			game.player_.RotateRight();
+			game.inputManger.SetKeyD(true);
 			break;
 
 		case SDL_SCANCODE_Q: //The Q key adds more asteroids
@@ -120,7 +119,13 @@ namespace Engine
 			OnExit();
 			break;
 		case SDL_SCANCODE_W:
-			game.player_.SetMovingForwardState(false);
+			game.inputManger.SetKeyW(false);
+			break;
+		case SDL_SCANCODE_A:
+			game.inputManger.SetKeyA(false);
+			break;
+		case SDL_SCANCODE_D:
+			game.inputManger.SetKeyD(false);
 			break;
 		default:
 			//DO NOTHING
