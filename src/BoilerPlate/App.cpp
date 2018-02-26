@@ -45,7 +45,7 @@ namespace Engine
 			//
 			while (SDL_PollEvent(&event))
 			{
-				OnEvent(&event);
+ 				OnEvent(&event);
 			}
 
 			//
@@ -78,17 +78,31 @@ namespace Engine
 
 	void App::OnKeyDown(SDL_KeyboardEvent keyBoardEvent)
 	{		
+		//[WIP] missing game input manager 
 		switch (keyBoardEvent.keysym.scancode)
 		{
 		case SDL_SCANCODE_W:
-			player.MoveForward();
-			player.SetMovingForwardState(true);
+			game.inputManger.SetKeyW(true);
 			break;
 		case SDL_SCANCODE_A:
-			player.RotateLeft();
+			game.inputManger.SetKeyA(true);
 			break;
 		case SDL_SCANCODE_D:
-			player.RotateRight();
+			game.inputManger.SetKeyD(true);
+			break;
+
+		case SDL_SCANCODE_Q: //The Q key adds more asteroids
+			game.AddAsteroids();
+			break;
+		case SDL_SCANCODE_E: //The E key eliminates the asteroids 
+			game.DeleteAsteroids();
+			break;
+		
+		case SDL_SCANCODE_F: //The F key activates and disables debugging mode
+			game.DebuggingModeToggle();
+			break;
+		case SDL_SCANCODE_SPACE:
+			game.ShootBullets();
 			break;
 		default:			
 			SDL_Log("%S was pressed.", keyBoardEvent.keysym.scancode);
@@ -98,13 +112,20 @@ namespace Engine
 
 	void App::OnKeyUp(SDL_KeyboardEvent keyBoardEvent)
 	{
+		//[WIP] missing game input manager 
 		switch (keyBoardEvent.keysym.scancode)
 		{
 		case SDL_SCANCODE_ESCAPE:
 			OnExit();
 			break;
 		case SDL_SCANCODE_W:
-			player.SetMovingForwardState(false);
+			game.inputManger.SetKeyW(false);
+			break;
+		case SDL_SCANCODE_A:
+			game.inputManger.SetKeyA(false);
+			break;
+		case SDL_SCANCODE_D:
+			game.inputManger.SetKeyD(false);
 			break;
 		default:
 			//DO NOTHING
@@ -117,6 +138,7 @@ namespace Engine
 		double startTime = m_timer->GetElapsedTimeInSeconds();
 
 		// Update code goes here
+		game.UpdateGame(DESIRED_FRAME_TIME, m_height, m_width);
 		//
 
 		double endTime = m_timer->GetElapsedTimeInSeconds();
@@ -135,13 +157,13 @@ namespace Engine
 		m_nUpdates++;
 	}
 
+
 	void App::Render()
 	{
-		player.Render();
-		asteroid.Render();
-		player.UpdateFrameData(m_height, m_width);
+		game.RenderGame();
 		SDL_GL_SwapWindow(m_mainWindow);
 	}
+
 
 	bool App::SDLInit()
 	{
@@ -238,8 +260,6 @@ namespace Engine
 		//
 		m_width = width;
 		m_height = height;
-
-		player.UpdateFrameData(m_height, m_width);
 
 		SetupViewport();
 	}

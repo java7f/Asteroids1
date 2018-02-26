@@ -2,7 +2,6 @@
 #include <vector>
 #include <algorithm>
 #include <math.h>
-using namespace std;
 
 //Class that contains different math functions
 class MathUtilities
@@ -13,13 +12,14 @@ public:
 
 	MathUtilities();
 	~MathUtilities();
-	int FloatToInt(float number); //rounds to the nearest integer
-	int FloatToEvenInt(float number); //rounds to the nearest even number
-	double ToRadians(double angle); //converts from degrees to radians	
-	double ToDegrees(double angle); //converts fron radians to degrees
-	bool IsPowerOfTwo(int number); //checks if a number is a power of two
-	double AngularDistanceR(double angle1, double angle2); //calculates the angular distance in radians
-	double AngularDistanceD(double angle1, double angle2); //calculates the angular distance in degrees
+	int FloatToInt(float); //rounds to the nearest integer
+	int FloatToEvenInt(float); //rounds to the nearest even number
+	double ToRadians(double); //converts from degrees to radians	
+	double ToDegrees(double); //converts fron radians to degrees
+	bool IsPowerOfTwo(int); //checks if a number is a power of two
+	double AngularDistanceR(double, double); //calculates the angular distance in radians
+	double AngularDistanceD(double, double); //calculates the angular distance in degrees
+	double DistanceBetweenTwoPoints(double, double, double, double); 
 
 
 	//clamps a number to the range specified
