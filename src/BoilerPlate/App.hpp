@@ -61,6 +61,7 @@ namespace Engine
 		int									m_width;
 		int									m_height;
 		int									m_nUpdates;
+		double								m_frameDeltaTime;
 		double								m_lastFrameTime;
 		std::string							m_title;
 		SDL_Window*							m_mainWindow;
