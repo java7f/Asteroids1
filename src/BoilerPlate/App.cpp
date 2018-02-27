@@ -21,6 +21,7 @@ namespace Engine
 	{
 		m_state = GameState::UNINITIALIZED;
 		m_lastFrameTime = m_timer->GetElapsedTimeInSeconds();
+		m_frameDeltaTime = DESIRED_FRAME_RATE;
 	}
 
 	App::~App()
@@ -136,21 +137,22 @@ namespace Engine
 	void App::Update()
 	{
 		double startTime = m_timer->GetElapsedTimeInSeconds();
-
-		// Update code goes here
-		game.UpdateGame(DESIRED_FRAME_TIME, m_height, m_width);
-		//
-
 		double endTime = m_timer->GetElapsedTimeInSeconds();
+		// Update code goes here
+		game.UpdateGame(m_frameDeltaTime, m_height, m_width);
+		//
+		endTime = m_timer->GetElapsedTimeInSeconds();
 		double nextTimeFrame = startTime + DESIRED_FRAME_TIME;
 
+		m_frameDeltaTime= DESIRED_FRAME_TIME - (endTime - startTime);
+		game.UpdateDeltaTime(m_frameDeltaTime);
 		while (endTime < nextTimeFrame)
 		{
 			// Spin lock
 			endTime = m_timer->GetElapsedTimeInSeconds();
 		}
 
-		//double elapsedTime = endTime - startTime;        
+		double elapsedTime = endTime - startTime;
 
 		m_lastFrameTime = m_timer->GetElapsedTimeInSeconds();
 

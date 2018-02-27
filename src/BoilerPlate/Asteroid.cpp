@@ -66,6 +66,7 @@ void Asteroid::PushEntityVertices()
 void Asteroid::DebuggingHitBox()
 {
 	int numbersOfLines = 500;
+	glColor3d(1.0, 1.0, 1.0);
 	glLoadIdentity();
 
 	glBegin(GL_LINE_LOOP);
@@ -106,6 +107,7 @@ void Asteroid::Render()
 void Asteroid::DrawEntity()
 {
 	glLoadIdentity();
+	glColor3d(1.0, 1.0, 1.0);
 	glTranslated(position_.x, position_.y, 0.0);
 	glRotated(rotationAngle, 0.0, 0.0, 1.0);
 	glBegin(GL_LINE_LOOP);

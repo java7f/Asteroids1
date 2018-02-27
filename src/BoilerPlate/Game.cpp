@@ -1,17 +1,14 @@
 #include "Game.hpp"
 
-//Global variables
-double radiusForMeasurement;
-double distanceToAsteroid;
-double shipX, shipY;
-double asteroidX, asteroidY;
-double bulletX, bulletY;
-
 Game::Game()
 {
 	player_ = Player();
 	PushAsteroids();
 	mathTools_ = MathUtilities();
+	graphColor = Palette();
+	orange = graphColor.getOrange();
+	deltaTimeContainer_ = std::vector<Vector2>(MAXIMUM_FRAME_CAPACITY);
+	PushDeltaTimeValues();
 }
 
 
@@ -34,23 +31,24 @@ void Game::RenderGame()
 		playerBullets_.at(i).Render();
 	}
 
+	RenderFramePlot();
 	DebuggingLine();
 }
 
-void Game::UpdateGame(double DESIRED_FRAME_TIME, double m_height, double m_width)
+void Game::UpdateGame(double deltaTime, double m_height, double m_width)
 {
 	player_.UpdateFrameData(m_height, m_width);
-	player_.Update(DESIRED_FRAME_TIME);
+	player_.Update(deltaTime);
 	for (int i = 0; i < asteroids_.size(); i++)
 	{
 		asteroids_[i].UpdateFrameData(m_height, m_width);
-		asteroids_[i].Update(DESIRED_FRAME_TIME);
+		asteroids_[i].Update(deltaTime);
 	}
 
 	for (int i = 0; i < playerBullets_.size(); i++)
 	{
 		playerBullets_[i].UpdateFrameData(m_height, m_width);
-		playerBullets_[i].Update(player_, DESIRED_FRAME_TIME);
+		playerBullets_[i].Update(player_, deltaTime);
 		if (!playerBullets_[i].GetAliveStatus())
 			playerBullets_.erase(playerBullets_.begin() + i);
 	}
@@ -75,6 +73,7 @@ void Game::DebuggingLine()
 	{
 		shipX = player_.GetPosition().x;
 		shipY = player_.GetPosition().y;
+		glColor3d(1.0, 1.0, 1.0);
 
 		glBegin(GL_LINE_LOOP);
 		for (int i = 0; i < asteroids_.size(); i++)
@@ -193,8 +192,8 @@ void Game::BulletCollision()
 						playerBullets_.erase(playerBullets_.begin() + j);
 						ifCollision = true;
 					}
+					break;
 				}
-				break;
 			}
 			if (ifCollision)
 				break;
@@ -283,4 +282,57 @@ void Game::GameInputManager()
 Player Game::GetPlayer()
 {
 	return player_;
+}
+
+void Game::PushDeltaTimeValues() 
+{
+
+	deltaTimePosition = 0;
+
+	for (int i = 0; i < MAXIMUM_FRAME_CAPACITY; i++) {
+
+		deltaTimeContainer_[i].x = i;
+		deltaTimeContainer_[i].y = 0.0;
+	}
+}
+
+void Game::UpdateDeltaTime(double deltaTime) 
+{
+
+	deltaTimeContainer_[deltaTimePosition] = Vector2((float)deltaTimePosition, deltaTime);
+
+	deltaTimePosition++;
+
+	if (deltaTimePosition >= MAXIMUM_FRAME_CAPACITY) {
+
+		deltaTimePosition = 0;
+	}
+}
+
+void Game::RenderFramePlot() 
+{
+	if(player_.GetDebuggingStatus())
+		DrawFrameGraph();
+}
+
+void Game::DrawFrameGraph() 
+{
+	glColor3d(1.0, 1.0, 1.0);
+	glLoadIdentity();
+	glTranslatef(350.0f, -300.0f, 0.0f);
+
+	//graphic axes
+	glBegin(GL_LINE_STRIP);
+	glVertex2d(0.0, 100.0);
+	glVertex2d(0.0, 0.0);
+	glVertex2d(200.0, 0.0);
+	glEnd();
+
+	glColor3d(orange.getRedValue(), orange.getGreenValue(), orange.getBlueValue());
+	glBegin(GL_LINE_STRIP);
+	for (int i = 0; i < MAXIMUM_FRAME_CAPACITY; i++) {
+
+		glVertex2d(X_AXIS_SCALE * deltaTimeContainer_[i].x, Y_AXIS_SCALE * (DESIRED_FRAME_TIME - deltaTimeContainer_[i].y));
+	}
+	glEnd();
 }
