@@ -78,6 +78,7 @@ void Player::Render()
 //Hides the process of drawing the ship 
 void Player::DrawEntity()
 {
+	glColor3d(1.0, 1.0, 1.0);
 	glLoadIdentity();
 	glTranslated(position_.x, position_.y, 0.0);
 	glRotated(rotationAngle, 0.0, 0.0, 1.0);
@@ -155,6 +156,7 @@ void Player::DebuggingHitBox()
 	if (isDebugging_) 
 	{
 		int numbersOfLines = 500;
+		glColor3d(1.0, 1.0, 1.0);
 		glLoadIdentity();
 		glBegin(GL_LINE_LOOP);
 		for (int i = 0; i <= numbersOfLines; i++)
