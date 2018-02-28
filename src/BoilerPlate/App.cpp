@@ -4,8 +4,9 @@
 
 // OpenGL includes
 #include <GL/glew.h>
-#include <SDL2/SDL_opengl.h>
-
+#include <SDL_opengl.h>
+#include <SDL.h>
+#include <SDL_ttf.h>
 namespace Engine
 {
 	const float DESIRED_FRAME_RATE = 60.0f;
@@ -93,10 +94,10 @@ namespace Engine
 			break;
 
 		case SDL_SCANCODE_Q: //The Q key adds more asteroids
-			game.AddAsteroids();
+			game.AddAsteroidsInDebugging();
 			break;
 		case SDL_SCANCODE_E: //The E key eliminates the asteroids 
-			game.DeleteAsteroids();
+			game.DeleteAsteroidsInDebugging();
 			break;
 		
 		case SDL_SCANCODE_F: //The F key activates and disables debugging mode

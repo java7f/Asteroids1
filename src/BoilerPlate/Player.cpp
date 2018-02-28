@@ -3,7 +3,7 @@
 #include <cmath>
 // OpenGL includes
 #include <GL/glew.h>
-#include <SDL2/SDL_opengl.h>
+#include <SDL_opengl.h>
 
 const double MAX_SPEED = 300;
 const double FRICTION = 0.98;
@@ -51,7 +51,7 @@ void Player::Update(double deltaTime)
 void Player::Render()
 {
 	Palette colorPalette = Palette();
-	Color background = colorPalette.getMaroon();
+	Color background = colorPalette.getBlack();
 	glClearColor(background.getRedValue(), background.getGreenValue(), background.getBlueValue(), background.getOpacityValue());
 	glClear(GL_COLOR_BUFFER_BIT);
 
@@ -92,6 +92,7 @@ void Player::DrawEntity()
 	//Controls if the thruster shows or not
 	if (isMovingForward)
 	{
+		glColor3d(1.0, 0.0, 0.0);
 		glBegin(GL_LINE_LOOP);
 		for (int i = 0; i < thrusterContainer_.size(); i++)
 		{

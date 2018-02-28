@@ -3,12 +3,14 @@
 Game::Game()
 {
 	player_ = Player();
-	PushAsteroids();
+	PushAsteroidsPerRound();
 	mathTools_ = MathUtilities();
 	graphColor = Palette();
 	orange = graphColor.getOrange();
 	deltaTimeContainer_ = std::vector<Vector2>(MAXIMUM_FRAME_CAPACITY);
 	PushDeltaTimeValues();
+	playerLives_ = 3; 
+	roundCounter = 0;
 }
 
 
@@ -51,6 +53,13 @@ void Game::UpdateGame(double deltaTime, double m_height, double m_width)
 		playerBullets_[i].Update(player_, deltaTime);
 		if (!playerBullets_[i].GetAliveStatus())
 			playerBullets_.erase(playerBullets_.begin() + i);
+	}
+
+	if (GetAsteroidsNumber() == 0)
+	{
+		std::cout << "hola";
+		roundCounter++;
+		PushAsteroidsPerRound();
 	}
 
 	//Checking collisions
@@ -114,12 +123,11 @@ void Game::DebuggingLine()
 }
 
 //Creates initial asteroids
-void Game::PushAsteroids()
+void Game::PushAsteroidsPerRound()
 {
-	for (int i = 0; i < 7; i++)
+	for (int i = 0; i < (INITIAL_ASTEROIDS + roundCounter); i++)
 	{
 		asteroids_.push_back(Asteroid(Asteroid::BIG));
-
 	}
 }
 
@@ -143,6 +151,7 @@ void Game::PlayerCollision()
 		if (CollidingDetection(player_, asteroids_[i]) && !player_.GetDebuggingStatus())
 		{
 			player_.SetAliveState(false);
+			playerLives_--;
 		}
 	}
 }
@@ -202,7 +211,7 @@ void Game::BulletCollision()
 }
 
 //Creates asteroids in debugging mode
-void Game::AddAsteroids()
+void Game::AddAsteroidsInDebugging()
 {
 	if (player_.GetDebuggingStatus())
 	{
@@ -214,7 +223,7 @@ void Game::AddAsteroids()
 }
 
 //Deletes asteroids in debugging mode
-void Game::DeleteAsteroids()
+void Game::DeleteAsteroidsInDebugging()
 {
 	if (asteroids_.size()>0)
 		asteroids_.pop_back();
@@ -253,6 +262,11 @@ bool Game::CollidingDetection(Entity firstEntity, Entity secondEntity)
 	{
 		return false;
 	}
+}
+
+int Game::GetAsteroidsNumber()
+{
+	return asteroids_.size();
 }
 
 //Manages the input keys for the game

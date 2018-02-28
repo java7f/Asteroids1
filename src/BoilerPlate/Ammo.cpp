@@ -7,7 +7,7 @@ Ammo::Ammo(Entity player)
 	Entity();
 	player_ = player;
 	BulletPosition();
-	moveValue = 100;
+	moveValue = 300;
 	mass_ = 0.50;
 	radius_ = 6;
 	bulletLife = 100;

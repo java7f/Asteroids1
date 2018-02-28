@@ -9,9 +9,10 @@
 
 const double DESIRED_FRAME_RATE = 60.0;
 const double DESIRED_FRAME_TIME = 1.0 / DESIRED_FRAME_RATE;
-const int MAXIMUM_FRAME_CAPACITY= 15;
 const double X_AXIS_SCALE = 15.0;
 const double Y_AXIS_SCALE = 100000.0;
+const int MAXIMUM_FRAME_CAPACITY= 15;
+const int INITIAL_ASTEROIDS = 5;
 
 class Game
 {
@@ -25,14 +26,15 @@ public:
 	void RenderGame();
 	void UpdateGame(double, double, double);
 	void DebuggingLine();
-	void PushAsteroids();
+	void PushAsteroidsPerRound();
 	void ShootBullets();
 	void PlayerCollision();
 	void BulletCollision();
-	void AddAsteroids();
-	void DeleteAsteroids();
+	void AddAsteroidsInDebugging();
+	void DeleteAsteroidsInDebugging();
 	void DebuggingModeToggle();
 	bool CollidingDetection(Entity, Entity);
+	int GetAsteroidsNumber();
 	void GameInputManager();
 	Player GetPlayer();
 	InputManager inputManger;
@@ -50,6 +52,7 @@ public:
 	double asteroidX, asteroidY;
 	double bulletX, bulletY;
 	int deltaTimePosition;
+	int roundCounter;
 	Palette graphColor;
 	Color orange;
 
@@ -61,6 +64,6 @@ private:
 	std::vector<Ammo> playerBullets_;
 	std::vector<Vector2> deltaTimeContainer_;
 	MathUtilities mathTools_;
-
+	int playerLives_;
 };
 

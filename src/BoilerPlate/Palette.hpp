@@ -12,7 +12,7 @@ public:
 	Color getMaroon();
 	Color getPurple();
 	Color getNavy();
-	Color getGray();
+	Color getBlack();
 	Color getOrange();
 
 private:
@@ -20,7 +20,7 @@ private:
 	Color maroon;
 	Color purple;
 	Color navy;
-	Color gray;
+	Color black;
 	Color orange;
 };
 

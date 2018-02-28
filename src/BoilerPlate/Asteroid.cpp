@@ -5,7 +5,7 @@
 #include <time.h>
 // OpenGL includes
 #include <GL/glew.h>
-#include <SDL2/SDL_opengl.h>
+#include <SDL_opengl.h>
 
 const double IMPULSE_ANGLE = 100;
 const int SPAWN_RANGE_LIMIT = 800;
