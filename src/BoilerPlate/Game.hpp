@@ -15,6 +15,7 @@ const int MAXIMUM_FRAME_CAPACITY= 15;
 const int INITIAL_ASTEROIDS = 4;
 const int LIVES_X_POSITION = 50;
 const int LIVES_Y_POSITION = 40;
+const int INCREASE_LIFE_FACTOR = 500;
 
 class Game
 {
@@ -39,6 +40,7 @@ public:
 	void GameInputManager();
 	void RespawnPlayer();
 	void PushShipLivesVertices();
+	void IncreaseLivesPerScore();
 	bool CollidingDetection(Entity, Entity);
 	int GetAsteroidsNumber();
 	Player GetPlayer();
@@ -61,6 +63,7 @@ public:
 	int livesRenderMovement;
 	int deltaTimePosition;
 	int roundCounter;
+	int additionalLiveFactor;
 	Palette graphColor;
 	Color orange;
 
@@ -74,5 +77,6 @@ private:
 	std::vector<Vector2> livesShipContainer_;
 	MathUtilities mathTools_;
 	int playerLives_;
+	int playerScore_;
 };
 

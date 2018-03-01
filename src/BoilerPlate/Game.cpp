@@ -11,8 +11,10 @@ Game::Game()
 	deltaTimeContainer_ = std::vector<Vector2>(MAXIMUM_FRAME_CAPACITY);
 	PushDeltaTimeValues();
 	playerLives_ = 3; 
+	playerScore_ = 0;
 	roundCounter = 0;
 	livesRenderMovement = 0;
+	additionalLiveFactor = 500;
 }
 
 
@@ -86,6 +88,8 @@ void Game::UpdateGame(double deltaTime, double m_height, double m_width)
 		roundCounter++;
 		PushAsteroidsPerRound();
 	}
+
+	IncreaseLivesPerScore();
 
 	//Checking collisions
 	PlayerCollision();
@@ -180,6 +184,11 @@ void Game::PlayerCollision()
 			player_.SetAliveState(false);
 			player_.PlayerRespawn();
 		}
+
+		if (playerLives_ == 0)
+		{
+			player_.SetAliveState(false);
+		}
 	}
 }
 
@@ -207,6 +216,7 @@ void Game::BulletCollision()
 						}
 						asteroids_.erase(asteroids_.begin() + i);
 						playerBullets_.erase(playerBullets_.begin() + j);
+						playerScore_ += 10;
 						ifCollision = true;
 					}
 					else if (asteroids_[i].GetSize() == Asteroid::MEDIUM)
@@ -220,12 +230,14 @@ void Game::BulletCollision()
 						}
 						asteroids_.erase(asteroids_.begin() + i);
 						playerBullets_.erase(playerBullets_.begin() + j);
+						playerScore_ += 20;
 						ifCollision = true;
 					}
 					else
 					{
 						asteroids_.erase(asteroids_.begin() + i);
 						playerBullets_.erase(playerBullets_.begin() + j);
+						playerScore_ += 40;
 						ifCollision = true;
 					}
 					break;
@@ -337,6 +349,15 @@ void Game::PushShipLivesVertices()
 	livesShipContainer_.push_back(Vector2(-10, -7.5));
 }
 
+void Game::IncreaseLivesPerScore()
+{
+	if (playerScore_ - additionalLiveFactor >= 0)
+	{
+		playerLives_++;
+		additionalLiveFactor += INCREASE_LIFE_FACTOR;
+	}
+}
+
 Player Game::GetPlayer()
 {
 	return player_;
@@ -358,7 +379,6 @@ void Game::UpdateDeltaTime(double deltaTime)
 {
 
 	deltaTimeContainer_[deltaTimePosition] = Vector2((float)deltaTimePosition, deltaTime);
-
 	deltaTimePosition++;
 
 	if (deltaTimePosition >= MAXIMUM_FRAME_CAPACITY) {

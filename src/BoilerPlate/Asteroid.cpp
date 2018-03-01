@@ -7,9 +7,6 @@
 #include <GL/glew.h>
 #include <SDL_opengl.h>
 
-const double IMPULSE_ANGLE = 100;
-const int SPAWN_RANGE_LIMIT = 800;
-
 Asteroid::Asteroid(AsteroidSize size)
 {
 	position_ = Vector2(rand()%SPAWN_RANGE_LIMIT, rand()%SPAWN_RANGE_LIMIT);

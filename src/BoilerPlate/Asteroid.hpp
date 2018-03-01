@@ -1,6 +1,9 @@
 #pragma once
 #include "Entity.hpp"
 
+const double IMPULSE_ANGLE = 100;
+const int SPAWN_RANGE_LIMIT = 700;
+
 class Asteroid : public Entity
 {
 public:
