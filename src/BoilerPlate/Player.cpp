@@ -93,7 +93,7 @@ void Player::DrawEntity()
 	if (isMovingForward)
 	{
 		glColor3d(1.0, 0.0, 0.0);
-		glBegin(GL_LINE_LOOP);
+		glBegin(GL_POLYGON);
 		for (int i = 0; i < thrusterContainer_.size(); i++)
 		{
 			glVertex2d((thrusterContainer_.at(i).x), (thrusterContainer_.at(i).y));
@@ -173,6 +173,16 @@ void Player::PlayerRespawn()
 	position_ = Vector2(0, 0);
 	velocity_ = Vector2(0, 0);
 	isAlive = true;
+}
+
+int Player::GetHeight()
+{
+	return frameHeight_;
+}
+
+int Player::GetWidth()
+{
+	return frameWidth_;
 }
 
 

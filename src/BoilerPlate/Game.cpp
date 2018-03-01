@@ -2,6 +2,7 @@
 
 Game::Game()
 {
+	PushShipLivesVertices();
 	player_ = Player();
 	PushAsteroidsPerRound();
 	mathTools_ = MathUtilities();
@@ -11,6 +12,7 @@ Game::Game()
 	PushDeltaTimeValues();
 	playerLives_ = 3; 
 	roundCounter = 0;
+	livesRenderMovement = 0;
 }
 
 
@@ -22,6 +24,7 @@ void Game::RenderGame()
 {
 	//Rendering the entities of the game
 	player_.Render();
+	RenderLives();
 
 	for (int i = 0; i < asteroids_.size(); i++)
 	{
@@ -37,8 +40,31 @@ void Game::RenderGame()
 	DebuggingLine();
 }
 
+void Game::RenderLives()
+{
+	livesRenderMovement = 0;
+	for (int i = 0; i < playerLives_; i++)
+	{
+		livesPositionX = (-frameWidth + LIVES_X_POSITION) + livesRenderMovement;
+		livesPositionY = -frameHeight + LIVES_Y_POSITION;
+		glLoadIdentity();
+		glTranslated(livesPositionX, livesPositionY, 0.0);
+		glColor3d(1.0, 1.0, 1.0);
+		glBegin(GL_POLYGON);
+		for (int j = 0; j < livesShipContainer_.size(); j++)
+		{
+			glVertex2d((livesShipContainer_.at(j).x), (livesShipContainer_.at(j).y));
+		}
+		glEnd();
+		livesRenderMovement += 25;
+	}
+	
+}
+
 void Game::UpdateGame(double deltaTime, double m_height, double m_width)
 {
+	frameHeight = m_height/2;
+	frameWidth = m_width/2;
 	player_.UpdateFrameData(m_height, m_width);
 	player_.Update(deltaTime);
 	for (int i = 0; i < asteroids_.size(); i++)
@@ -57,7 +83,6 @@ void Game::UpdateGame(double deltaTime, double m_height, double m_width)
 
 	if (GetAsteroidsNumber() == 0)
 	{
-		std::cout << "hola";
 		roundCounter++;
 		PushAsteroidsPerRound();
 	}
@@ -100,6 +125,7 @@ void Game::DebuggingLine()
 		}
 		glEnd();
 
+		glLoadIdentity();
 		glBegin(GL_LINE_LOOP);
 		for (int i = 0; i < asteroids_.size(); i++)
 		{
@@ -150,8 +176,9 @@ void Game::PlayerCollision()
 	{
 		if (CollidingDetection(player_, asteroids_[i]) && !player_.GetDebuggingStatus())
 		{
-			player_.SetAliveState(false);
 			playerLives_--;
+			player_.SetAliveState(false);
+			player_.PlayerRespawn();
 		}
 	}
 }
@@ -215,7 +242,7 @@ void Game::AddAsteroidsInDebugging()
 {
 	if (player_.GetDebuggingStatus())
 	{
-		Asteroid newAsteroid = Asteroid(newAsteroid.SMALL);
+		Asteroid newAsteroid = Asteroid(newAsteroid.BIG);
 		newAsteroid.ChangeDebuggingState();
 		asteroids_.push_back(newAsteroid);
 	}
@@ -225,7 +252,7 @@ void Game::AddAsteroidsInDebugging()
 //Deletes asteroids in debugging mode
 void Game::DeleteAsteroidsInDebugging()
 {
-	if (asteroids_.size()>0)
+	if (asteroids_.size() > 0)
 		asteroids_.pop_back();
 }
 
@@ -291,6 +318,23 @@ void Game::GameInputManager()
 	{
 		player_.RotateRight();
 	}
+}
+
+void Game::RespawnPlayer()
+{
+	if (!player_.GetAliveStatus() && playerLives_ != 0)
+	{
+		player_.PlayerRespawn();
+	}
+}
+
+void Game::PushShipLivesVertices()
+{
+	livesShipContainer_.push_back(Vector2(0, 15));
+	livesShipContainer_.push_back(Vector2(10, -7.5));
+	livesShipContainer_.push_back(Vector2(4.5, -3));
+	livesShipContainer_.push_back(Vector2(-4.5, -3));
+	livesShipContainer_.push_back(Vector2(-10, -7.5));
 }
 
 Player Game::GetPlayer()

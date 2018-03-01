@@ -20,6 +20,8 @@ public:
 	void PushEntityVertices() override;
 	void DebuggingHitBox() override;
 	void PlayerRespawn();
+	int GetHeight();
+	int GetWidth();
 
 private:
 	//Members

@@ -16,14 +16,14 @@ Asteroid::Asteroid(AsteroidSize size)
 	velocity_ = Vector2(0, 0);
 
 	mathTools_ = MathUtilities();
-	mass_ = 1.25;
+	mass_ = size;
 	rotationAngle = 0;
 	size_ = size;
 	rotationFactor = 120;
 	radius_ = 15*size_;
 
 	moveAngle = rand();
-	moveValue = 50;
+	moveValue = 200;
 }
 
 Asteroid::Asteroid(AsteroidSize size, Asteroid asteroid)
@@ -32,14 +32,14 @@ Asteroid::Asteroid(AsteroidSize size, Asteroid asteroid)
 	velocity_ = Vector2(0, 0);
 
 	mathTools_ = MathUtilities();
-	mass_ = 1.25;
+	mass_ = size;
 	rotationAngle = 0;
 	size_ = size;
 	rotationFactor = 120;
 	radius_ = 15 * size_;
 
 	moveAngle = rand();
-	moveValue = 50;
+	moveValue = 200;
 }
 
 Asteroid::~Asteroid()
