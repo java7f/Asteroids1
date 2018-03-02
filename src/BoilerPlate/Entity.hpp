@@ -1,9 +1,7 @@
 #pragma once
 #include "Vector2.hpp"
 #include "MathUtilities.hpp"
-// OpenGL includes
-#include <GL/glew.h>
-#include <SDL_opengl.h>
+#include "OpenGL_Includes.hpp"
 
 class Entity
 {
@@ -15,9 +13,9 @@ public:
 	//Public functions
 	virtual void Update(double);
 	virtual void Render();
-	virtual void Warp(int, int);
+	virtual void Warp(double, double);
 	virtual void DrawEntity();
-	virtual void UpdateFrameData(int, int);
+	virtual void UpdateFrameData(double, double);
 	virtual void EntityImpulse();
 	virtual void PushEntityVertices();
 	virtual void DebuggingHitBox();
@@ -29,19 +27,20 @@ public:
 	double GetRotationAngle();
 	virtual bool GetAliveStatus();
 
+	//Global variables
+	double rotationAngle;
+	double moveValue;
+	bool isAlive;
+
 protected:
 	//Members
 	Vector2 position_;
 	Vector2 velocity_;
 	MathUtilities mathTools_;
 	double mass_;
-	int frameHeight_;
-	int frameWidth_;
+	double frameHeight_;
+	double frameWidth_;
 	double radius_;
 	bool isDebugging_;
-
-	double rotationAngle;
-	double moveValue;
-	bool isAlive;
 };
 

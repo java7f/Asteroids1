@@ -223,6 +223,7 @@ copy /Y "$(SolutionDir)\Externals\irrKlang-64bit-1.6.0\bin\winx64-visualStudio\i
     <ClInclude Include="Game.hpp" />
     <ClInclude Include="InputManager.hpp" />
     <ClInclude Include="MathUtilities.hpp" />
+    <ClInclude Include="OpenGL_Includes.hpp" />
     <ClInclude Include="Palette.hpp" />
     <ClInclude Include="Player.hpp" />
     <ClInclude Include="SDLEvent.hpp" />

@@ -37,7 +37,7 @@ void Entity::Render()
 }
 
 //Makes the entity appear on the opposite side of the screen if it reaches a border
-void Entity::Warp(int frameHeight, int frameWidth)
+void Entity::Warp(double frameHeight, double frameWidth)
 {
 	if (position_.x > (frameWidth))
 		position_.x = -frameWidth;
@@ -59,7 +59,7 @@ void Entity::DrawEntity()
 }
 
 //changes the value of the frame height and width
-void Entity::UpdateFrameData(int height, int width)
+void Entity::UpdateFrameData(double height, double width)
 {
 	frameHeight_ = height/2;
 	frameWidth_ = width/2;

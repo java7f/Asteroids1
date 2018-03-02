@@ -1,6 +1,7 @@
 #include "Game.hpp"
 #include <string>
 
+
 Game::Game()
 {
 	PushShipLivesVertices();
@@ -45,12 +46,15 @@ void Game::RenderGame()
 		playerBullets_.at(i).Render();
 	}
 
+	//Rendering the debugging features
 	RenderFramePlot();
 	DebuggingLine();
+	//Renderind text
 	RenderPlayerScore();
 	RenderResetGame();
 }
 
+//Rendering lives
 void Game::RenderLives()
 {
 	livesRenderMovement = 0;
@@ -72,26 +76,29 @@ void Game::RenderLives()
 	
 }
 
+//Renders the score
 void Game::RenderPlayerScore()
 {
 	scorePositionX = frameWidth - SCORE_X_POSITION;
 	scorePositionY = frameHeight - SCORE_Y_POSITION;
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	gameFont_->FontRender(std::to_string(playerScore_),fontColor_, scorePositionX, scorePositionY, SCORE_FONT_SIZE);
+	gameFont_->FontRender(std::to_string(playerScore_),fontColor_, (float)scorePositionX, (float)scorePositionY, SCORE_FONT_SIZE);
 }
 
+//Renders a message to let the user know that the game is over and he should restart
 void Game::RenderResetGame()
 {
 	if (playerLives_ == 0) 
 	{
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		gameFont_->FontRender("You lost!", fontColor_, MESSAGES_X_POSITION, MESSAGES_Y_POSITION, RESET_FONT_SIZE);
-		gameFont_->FontRender("Press R to restart the game.", fontColor_, MESSAGES_X_POSITION - 140, ORIGIN, RESET_FONT_SIZE);
+		gameFont_->FontRender("You lost!", fontColor_, (float) MESSAGES_X_POSITION, (float) MESSAGES_Y_POSITION, RESET_FONT_SIZE);
+		gameFont_->FontRender("Press R to restart the game.", fontColor_, (float) MESSAGES_X_POSITION - 140, (float) ORIGIN, RESET_FONT_SIZE);
 	}
 }
 
+//Updating the entities of the game
 void Game::UpdateGame(double deltaTime, double m_height, double m_width)
 {
 	frameHeight = m_height/2;
@@ -112,24 +119,28 @@ void Game::UpdateGame(double deltaTime, double m_height, double m_width)
 			playerBullets_.erase(playerBullets_.begin() + i);
 	}
 
+	//When the players kills all rendered asteroids, spawns more
 	if (GetAsteroidsNumber() == 0)
 	{
 		roundCounter++;
 		PushAsteroidsPerRound();
 	}
 
+	//Controlling immortality at respawn
 	if (isRespawning)
 	{
 		immortalityTime--;
+		RespawnTilting();
 	}
 
+	//Resetting the immortality counter
 	if (immortalityTime == 0)
 	{
 		immortalityTime = RESET_IMMORTAL_TIME;
 		isRespawning = false;
-		ifCollision = true;
 	}
 
+	//Increases the player lives if it reaches an specific score
 	IncreaseLivesPerScore();
 
 	//Checking collisions
@@ -147,7 +158,7 @@ void Game::DebuggingLine()
 
 	radiusForMeasurement = 2 * player_.GetRadius();
 
-
+	//Between ship and asteroids
 	if (player_.GetDebuggingStatus())
 	{
 		shipX = player_.GetPosition().x;
@@ -170,6 +181,7 @@ void Game::DebuggingLine()
 		}
 		glEnd();
 
+		//Between bullets and asteroids
 		glLoadIdentity();
 		glBegin(GL_LINE_LOOP);
 		for (int i = 0; i < asteroids_.size(); i++)
@@ -220,12 +232,12 @@ void Game::PlayerCollision()
 {
 	for (int i = 0; i < asteroids_.size(); i++)
 	{
-		if (CollidingDetection(player_, asteroids_[i]) && !player_.GetDebuggingStatus() && playerLives_ > 0)
+		if (CollidingDetection(player_, asteroids_[i]) && !player_.GetDebuggingStatus() && playerLives_ > 0 && !isRespawning)
 		{
 			playerLives_--;
 			player_.SetAliveState(false);
-			player_.PlayerRespawn();
-			soundEngine_->play2D("sounds/saucerBig.wav");
+			RespawnPlayer();
+			soundEngine_->play2D("sounds/beat2.wav");
 		}
 
 		if (playerLives_ == 0 && !player_.GetDebuggingStatus())
@@ -353,12 +365,13 @@ int Game::GetAsteroidsNumber()
 	return asteroids_.size();
 }
 
+//Returns the font used
 DisplayText Game::GetFont()
 {
 	return *gameFont_;
 }
 
-//Manages the input keys for the game
+//Manages the input moving keys for the game
 void Game::GameInputManager()
 {
 	if (inputManger.GetKeyW())
@@ -384,16 +397,17 @@ void Game::GameInputManager()
 	}
 }
 
+//Makes the palyer appear again
 void Game::RespawnPlayer()
 {
 	if (!player_.GetAliveStatus() && playerLives_ != 0)
 	{
 		player_.PlayerRespawn();
 		isRespawning = true;
-		ifCollision = false;
 	}
 }
 
+//Saves the lives vertices
 void Game::PushShipLivesVertices()
 {
 	livesShipContainer_.push_back(Vector2(0, 15));
@@ -403,6 +417,7 @@ void Game::PushShipLivesVertices()
 	livesShipContainer_.push_back(Vector2(-10, -7.5));
 }
 
+//Adss lives per score
 void Game::IncreaseLivesPerScore()
 {
 	if (playerScore_ - additionalLiveFactor >= 0)
@@ -413,6 +428,24 @@ void Game::IncreaseLivesPerScore()
 	}
 }
 
+//Tilting while spawning
+void Game::RespawnTilting()
+{
+	if (immortalityTime == 135)
+		player_.SetAliveState(false);
+	if (immortalityTime == 125)
+		player_.SetAliveState(true);
+	if (immortalityTime == 115)
+		player_.SetAliveState(false);
+	if (immortalityTime == 105)
+		player_.SetAliveState(true);
+	if (immortalityTime == 95)
+		player_.SetAliveState(false);
+	if (immortalityTime == 85)
+		player_.SetAliveState(true);
+}
+
+//Resetting parameters
 void Game::ResetGame()
 {
 	if (playerLives_ == 0)
@@ -442,6 +475,7 @@ Player Game::GetPlayer()
 	return player_;
 }
 
+/*Managing delta time calculation*/
 void Game::PushDeltaTimeValues() 
 {
 
@@ -466,6 +500,7 @@ void Game::UpdateDeltaTime(double deltaTime)
 	}
 }
 
+//Rendering the graphic for the frames
 void Game::RenderFramePlot() 
 {
 	if(player_.GetDebuggingStatus())

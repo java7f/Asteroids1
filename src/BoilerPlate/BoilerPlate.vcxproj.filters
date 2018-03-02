@@ -37,6 +37,7 @@
     <ClInclude Include="Ammo.hpp" />
     <ClInclude Include="InputManager.hpp" />
     <ClInclude Include="DisplayText.hpp" />
+    <ClInclude Include="OpenGL_Includes.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">

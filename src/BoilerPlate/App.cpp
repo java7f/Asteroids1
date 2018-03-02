@@ -3,9 +3,7 @@
 #include <algorithm>
 
 // OpenGL includes
-#include <GL/glew.h>
-#include <SDL_opengl.h>
-#include <SDL.h>
+#include "OpenGL_Includes.hpp"
 namespace Engine
 {
 	const float DESIRED_FRAME_RATE = 60.0f;

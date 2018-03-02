@@ -1,7 +1,6 @@
 #include "MathUtilities.hpp"
 
 
-
 MathUtilities::MathUtilities()
 {
 }

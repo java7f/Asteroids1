@@ -175,12 +175,12 @@ void Player::PlayerRespawn()
 	isAlive = true;
 }
 
-int Player::GetHeight()
+double Player::GetHeight()
 {
 	return frameHeight_;
 }
 
-int Player::GetWidth()
+double Player::GetWidth()
 {
 	return frameWidth_;
 }

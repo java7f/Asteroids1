@@ -1,7 +1,5 @@
 #include "Ammo.hpp"
 
-
-
 Ammo::Ammo(Entity player)
 {
 	Entity();
@@ -10,7 +8,7 @@ Ammo::Ammo(Entity player)
 	moveValue = 300;
 	mass_ = 0.50;
 	radius_ = 6;
-	bulletLife = 100;
+	bulletLife_ = 100;
 }
 
 
@@ -21,8 +19,9 @@ Ammo::~Ammo()
 void Ammo::Update(Entity player, double deltaTime)
 {
 	EntityImpulse();
-	bulletLife--;
-	if (bulletLife <= 0)
+	//Controlling the life of the bullet
+	bulletLife_--;
+	if (bulletLife_ <= 0)
 	{
 		isAlive = false;
 	}
@@ -38,9 +37,11 @@ void Ammo::Render()
 	if (isDebugging_)
 		DebuggingHitBox();
 
+	//Cleaning the container
 	bulletContainer_.clear();
 }
 
+//Draws the bullet
 void Ammo::DrawEntity()
 {
 	glLoadIdentity();
@@ -53,6 +54,7 @@ void Ammo::DrawEntity()
 	glEnd();
 }
 
+//Makes the bullet move
 void Ammo::EntityImpulse()
 {
 	if (mass_ > 0)
@@ -62,6 +64,7 @@ void Ammo::EntityImpulse()
 	}
 }
 
+//Saves the bullet vertices
 void Ammo::PushEntityVertices()
 {
 	bulletContainer_.push_back(Vector2(-5, 0));
@@ -69,6 +72,7 @@ void Ammo::PushEntityVertices()
 	bulletContainer_.push_back(Vector2(0, 8));
 }
 
+//Draws the hit box in debugging
 void Ammo::DebuggingHitBox()
 {
 	int numbersOfLines = 500;
@@ -82,6 +86,7 @@ void Ammo::DebuggingHitBox()
 	glEnd();
 }
 
+//Moves the bullet initial position according to the ship orientation
 void Ammo::BulletPosition()
 {
 	position_.x = player_.GetPosition().x + (player_.GetRadius() * -sin(mathTools_.ToRadians(player_.GetRotationAngle())));

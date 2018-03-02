@@ -68,10 +68,10 @@ void DisplayText::FontRender(std::string message, SDL_Color color, float x, floa
 
 	//Draw the OpenGL texture as a Quad
 	glBegin(GL_QUADS); {
-		glTexCoord2d(0, 1); glVertex3f(0, 0, 0);
-		glTexCoord2d(1, 1); glVertex3f(0 + surface->w, 0, 0);
-		glTexCoord2d(1, 0); glVertex3f(0 + surface->w, 0 + surface->h, 0);
-		glTexCoord2d(0, 0); glVertex3f(0, 0 + surface->h, 0);
+		glTexCoord2d(0, 1); glVertex3f(0.0f, 0.0f, 0.0f);
+		glTexCoord2d(1, 1); glVertex3f(0.0f + surface->w, 0.0f, 0.0f);
+		glTexCoord2d(1, 0); glVertex3f(0.0f + surface->w, 0.0f + surface->h, 0.0f);
+		glTexCoord2d(0, 0); glVertex3f(0.0f, 0.0f + surface->h, 0.0f);
 	} glEnd();
 	glDisable(GL_TEXTURE_2D);
 
