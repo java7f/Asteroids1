@@ -20,6 +20,6 @@ public:
 	//Members
 	Entity player_;
 	std::vector<Vector2> bulletContainer_;
-	double bulletLife;
+	double bulletLife_;
 };
 

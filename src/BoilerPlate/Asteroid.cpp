@@ -5,10 +5,7 @@
 #include <time.h>
 // OpenGL includes
 #include <GL/glew.h>
-#include <SDL2/SDL_opengl.h>
-
-const double IMPULSE_ANGLE = 100;
-const int SPAWN_RANGE_LIMIT = 800;
+#include <SDL_opengl.h>
 
 Asteroid::Asteroid(AsteroidSize size)
 {
@@ -16,14 +13,14 @@ Asteroid::Asteroid(AsteroidSize size)
 	velocity_ = Vector2(0, 0);
 
 	mathTools_ = MathUtilities();
-	mass_ = 1.25;
+	mass_ = size;
 	rotationAngle = 0;
 	size_ = size;
 	rotationFactor = 120;
 	radius_ = 15*size_;
 
 	moveAngle = rand();
-	moveValue = 50;
+	moveValue = 200;
 }
 
 Asteroid::Asteroid(AsteroidSize size, Asteroid asteroid)
@@ -32,14 +29,14 @@ Asteroid::Asteroid(AsteroidSize size, Asteroid asteroid)
 	velocity_ = Vector2(0, 0);
 
 	mathTools_ = MathUtilities();
-	mass_ = 1.25;
+	mass_ = size;
 	rotationAngle = 0;
 	size_ = size;
 	rotationFactor = 120;
 	radius_ = 15 * size_;
 
 	moveAngle = rand();
-	moveValue = 50;
+	moveValue = 200;
 }
 
 Asteroid::~Asteroid()

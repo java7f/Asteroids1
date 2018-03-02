@@ -9,7 +9,7 @@ Color::Color()
 	opacitylvl = 0.0;
 }
 
-Color::Color(double redValue, double greenValue, double blueValue, double opacityValue)
+Color::Color(float redValue, float greenValue, float blueValue, float opacityValue)
 {
 	redlvl = redValue;
 	greenlvl = greenValue;
@@ -26,42 +26,22 @@ Color::~Color()
 	opacitylvl = NULL;
 }
 
-double Color::getRedValue()
+float Color::getRedValue()
 {
 	return redlvl;
 }
 
-double Color::getGreenValue()
+float Color::getGreenValue()
 {
 	return greenlvl;
 }
 
-double Color::getBlueValue()
+float Color::getBlueValue()
 {
 	return bluelvl;
 }
 
-double Color::getOpacityValue()
+float Color::getOpacityValue()
 {
 	return opacitylvl;
-}
-
-void Color::setRed(double redValue)
-{
-	redlvl = redValue;
-}
-
-void Color::setGreen(double greenValue)
-{
-	greenlvl = greenValue;
-}
-
-void Color::setBlue(double blueValue)
-{
-	bluelvl = blueValue;
-}
-
-void Color::setOpacity(double opacityValue)
-{
-	opacitylvl = opacityValue;
 }
