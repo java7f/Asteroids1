@@ -28,6 +28,7 @@ Game::Game()
 
 Game::~Game()
 {
+	delete gameFont_;
 }
 
 void Game::RenderGame()
