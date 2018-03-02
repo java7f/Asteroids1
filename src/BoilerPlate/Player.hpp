@@ -20,13 +20,15 @@ public:
 	void PushEntityVertices() override;
 	void DebuggingHitBox() override;
 	void PlayerRespawn();
+	double GetHeight();
+	double GetWidth();
 
 private:
 	//Members
 	std::vector<Vector2> shipContainer_;
 	std::vector<Vector2> thrusterContainer_;
 
-	//Attributes
+	//Global Variables
 	bool isMovingForward;
 };
 

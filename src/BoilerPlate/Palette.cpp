@@ -7,7 +7,7 @@ Palette::Palette()
 	maroon = Color(0.502f, 0.000f, 0.000f, 1.0f);
 	purple = Color(0.502f, 0.000f, 0.502f, 1.0f);
 	navy = Color(0.000f, 0.000f, 0.502f, 1.0f);
-	gray = Color(0.439f, 0.502f, 0.565f, 1.0f);
+	black = Color(0.0, 0.0, 0.0, 1.0f);
 	orange = Color(1.000f, 0.647f, 0.000f, 1.0f);
 }
 
@@ -31,9 +31,9 @@ Color Palette::getNavy()
 	return navy;
 }
 
-Color Palette::getGray()
+Color Palette::getBlack()
 {
-	return gray;
+	return black;
 }
 
 Color Palette::getOrange()

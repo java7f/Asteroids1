@@ -1,14 +1,28 @@
 #include "Game.hpp"
+#include <string>
+
 
 Game::Game()
 {
+	PushShipLivesVertices();
 	player_ = Player();
-	PushAsteroids();
+	PushAsteroidsPerRound();
 	mathTools_ = MathUtilities();
 	graphColor = Palette();
 	orange = graphColor.getOrange();
 	deltaTimeContainer_ = std::vector<Vector2>(MAXIMUM_FRAME_CAPACITY);
+	soundEngine_ = irrklang::createIrrKlangDevice();
 	PushDeltaTimeValues();
+	playerLives_ = INITIAL_LIVES; 
+	playerScore_ = 0;
+	roundCounter = 0;
+	livesRenderMovement = 0;
+	additionalLiveFactor = 2000;
+	immortalityTime = RESET_IMMORTAL_TIME;
+	ifCollision = false;
+	isRespawning = false;
+	gameFont_ = new DisplayText(frameHeight, frameWidth, SCORE_FONT_SIZE);
+	gameFont_->InitializeFont();
 }
 
 
@@ -20,6 +34,7 @@ void Game::RenderGame()
 {
 	//Rendering the entities of the game
 	player_.Render();
+	RenderLives();
 
 	for (int i = 0; i < asteroids_.size(); i++)
 	{
@@ -31,12 +46,63 @@ void Game::RenderGame()
 		playerBullets_.at(i).Render();
 	}
 
+	//Rendering the debugging features
 	RenderFramePlot();
 	DebuggingLine();
+	//Renderind text
+	RenderPlayerScore();
+	RenderResetGame();
 }
 
+//Rendering lives
+void Game::RenderLives()
+{
+	livesRenderMovement = 0;
+	for (int i = 0; i < playerLives_; i++)
+	{
+		livesPositionX = frameWidth - LIVES_X_POSITION + livesRenderMovement;
+		livesPositionY = frameHeight - LIVES_Y_POSITION;
+		glLoadIdentity();
+		glTranslated(livesPositionX, livesPositionY, 0.0);
+		glColor3d(1.0, 1.0, 1.0);
+		glBegin(GL_POLYGON);
+		for (int j = 0; j < livesShipContainer_.size(); j++)
+		{
+			glVertex2d((livesShipContainer_.at(j).x), (livesShipContainer_.at(j).y));
+		}
+		glEnd();
+		livesRenderMovement += 25;
+	}
+	
+}
+
+//Renders the score
+void Game::RenderPlayerScore()
+{
+	scorePositionX = frameWidth - SCORE_X_POSITION;
+	scorePositionY = frameHeight - SCORE_Y_POSITION;
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	gameFont_->FontRender(std::to_string(playerScore_),fontColor_, (float)scorePositionX, (float)scorePositionY, SCORE_FONT_SIZE);
+}
+
+//Renders a message to let the user know that the game is over and he should restart
+void Game::RenderResetGame()
+{
+	if (playerLives_ == 0) 
+	{
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		gameFont_->FontRender("You lost!", fontColor_, (float) MESSAGES_X_POSITION, (float) MESSAGES_Y_POSITION, RESET_FONT_SIZE);
+		gameFont_->FontRender("Press R to restart the game.", fontColor_, (float) MESSAGES_X_POSITION - 140, (float) ORIGIN, RESET_FONT_SIZE);
+	}
+}
+
+//Updating the entities of the game
 void Game::UpdateGame(double deltaTime, double m_height, double m_width)
 {
+	frameHeight = m_height/2;
+	frameWidth = m_width/2;
 	player_.UpdateFrameData(m_height, m_width);
 	player_.Update(deltaTime);
 	for (int i = 0; i < asteroids_.size(); i++)
@@ -53,6 +119,30 @@ void Game::UpdateGame(double deltaTime, double m_height, double m_width)
 			playerBullets_.erase(playerBullets_.begin() + i);
 	}
 
+	//When the players kills all rendered asteroids, spawns more
+	if (GetAsteroidsNumber() == 0)
+	{
+		roundCounter++;
+		PushAsteroidsPerRound();
+	}
+
+	//Controlling immortality at respawn
+	if (isRespawning)
+	{
+		immortalityTime--;
+		RespawnTilting();
+	}
+
+	//Resetting the immortality counter
+	if (immortalityTime == 0)
+	{
+		immortalityTime = RESET_IMMORTAL_TIME;
+		isRespawning = false;
+	}
+
+	//Increases the player lives if it reaches an specific score
+	IncreaseLivesPerScore();
+
 	//Checking collisions
 	PlayerCollision();
 	BulletCollision();
@@ -68,7 +158,7 @@ void Game::DebuggingLine()
 
 	radiusForMeasurement = 2 * player_.GetRadius();
 
-
+	//Between ship and asteroids
 	if (player_.GetDebuggingStatus())
 	{
 		shipX = player_.GetPosition().x;
@@ -91,6 +181,8 @@ void Game::DebuggingLine()
 		}
 		glEnd();
 
+		//Between bullets and asteroids
+		glLoadIdentity();
 		glBegin(GL_LINE_LOOP);
 		for (int i = 0; i < asteroids_.size(); i++)
 		{
@@ -114,12 +206,11 @@ void Game::DebuggingLine()
 }
 
 //Creates initial asteroids
-void Game::PushAsteroids()
+void Game::PushAsteroidsPerRound()
 {
-	for (int i = 0; i < 7; i++)
+	for (int i = 0; i < (INITIAL_ASTEROIDS + roundCounter); i++)
 	{
 		asteroids_.push_back(Asteroid(Asteroid::BIG));
-
 	}
 }
 
@@ -132,6 +223,7 @@ void Game::ShootBullets()
 		if (player_.GetDebuggingStatus())
 			newBullet.ChangeDebuggingState();
 		playerBullets_.push_back(newBullet);
+		soundEngine_->play2D("sounds/fire.wav");
 	}
 }
 
@@ -140,7 +232,15 @@ void Game::PlayerCollision()
 {
 	for (int i = 0; i < asteroids_.size(); i++)
 	{
-		if (CollidingDetection(player_, asteroids_[i]) && !player_.GetDebuggingStatus())
+		if (CollidingDetection(player_, asteroids_[i]) && !player_.GetDebuggingStatus() && playerLives_ > 0 && !isRespawning)
+		{
+			playerLives_--;
+			player_.SetAliveState(false);
+			RespawnPlayer();
+			soundEngine_->play2D("sounds/beat2.wav");
+		}
+
+		if (playerLives_ == 0 && !player_.GetDebuggingStatus())
 		{
 			player_.SetAliveState(false);
 		}
@@ -151,8 +251,7 @@ void Game::PlayerCollision()
 void Game::BulletCollision()
 {
 	if (!player_.GetDebuggingStatus()) {
-		bool ifCollision = false;
-
+		ifCollision = false;
 		for (int i = 0; i < asteroids_.size(); i++)
 		{
 			for (int j = 0; j < playerBullets_.size(); j++)
@@ -171,6 +270,8 @@ void Game::BulletCollision()
 						}
 						asteroids_.erase(asteroids_.begin() + i);
 						playerBullets_.erase(playerBullets_.begin() + j);
+						soundEngine_->play2D("sounds/bangLarge.wav");
+						playerScore_ += 10;
 						ifCollision = true;
 					}
 					else if (asteroids_[i].GetSize() == Asteroid::MEDIUM)
@@ -184,12 +285,16 @@ void Game::BulletCollision()
 						}
 						asteroids_.erase(asteroids_.begin() + i);
 						playerBullets_.erase(playerBullets_.begin() + j);
+						soundEngine_->play2D("sounds/bangMedium.wav");
+						playerScore_ += 20;
 						ifCollision = true;
 					}
 					else
 					{
 						asteroids_.erase(asteroids_.begin() + i);
 						playerBullets_.erase(playerBullets_.begin() + j);
+						soundEngine_->play2D("sounds/bangSmall.wav");
+						playerScore_ += 40;
 						ifCollision = true;
 					}
 					break;
@@ -202,11 +307,11 @@ void Game::BulletCollision()
 }
 
 //Creates asteroids in debugging mode
-void Game::AddAsteroids()
+void Game::AddAsteroidsInDebugging()
 {
 	if (player_.GetDebuggingStatus())
 	{
-		Asteroid newAsteroid = Asteroid(newAsteroid.SMALL);
+		Asteroid newAsteroid = Asteroid(newAsteroid.BIG);
 		newAsteroid.ChangeDebuggingState();
 		asteroids_.push_back(newAsteroid);
 	}
@@ -214,9 +319,9 @@ void Game::AddAsteroids()
 }
 
 //Deletes asteroids in debugging mode
-void Game::DeleteAsteroids()
+void Game::DeleteAsteroidsInDebugging()
 {
-	if (asteroids_.size()>0)
+	if (asteroids_.size() > 0)
 		asteroids_.pop_back();
 }
 
@@ -255,13 +360,26 @@ bool Game::CollidingDetection(Entity firstEntity, Entity secondEntity)
 	}
 }
 
-//Manages the input keys for the game
+int Game::GetAsteroidsNumber()
+{
+	return asteroids_.size();
+}
+
+//Returns the font used
+DisplayText Game::GetFont()
+{
+	return *gameFont_;
+}
+
+//Manages the input moving keys for the game
 void Game::GameInputManager()
 {
 	if (inputManger.GetKeyW())
 	{
 		player_.MoveForward();
 		player_.SetMovingForwardState(true);
+		if(player_.GetAliveStatus())
+			soundEngine_->play2D("sounds/thrust.wav");
 	}
 	else
 	{
@@ -279,11 +397,85 @@ void Game::GameInputManager()
 	}
 }
 
+//Makes the palyer appear again
+void Game::RespawnPlayer()
+{
+	if (!player_.GetAliveStatus() && playerLives_ != 0)
+	{
+		player_.PlayerRespawn();
+		isRespawning = true;
+	}
+}
+
+//Saves the lives vertices
+void Game::PushShipLivesVertices()
+{
+	livesShipContainer_.push_back(Vector2(0, 15));
+	livesShipContainer_.push_back(Vector2(10, -7.5));
+	livesShipContainer_.push_back(Vector2(4.5, -3));
+	livesShipContainer_.push_back(Vector2(-4.5, -3));
+	livesShipContainer_.push_back(Vector2(-10, -7.5));
+}
+
+//Adss lives per score
+void Game::IncreaseLivesPerScore()
+{
+	if (playerScore_ - additionalLiveFactor >= 0)
+	{
+		playerLives_++;
+		additionalLiveFactor += INCREASE_LIFE_FACTOR;
+		soundEngine_->play2D("sounds/extraShip.wav");
+	}
+}
+
+//Tilting while spawning
+void Game::RespawnTilting()
+{
+	if (immortalityTime == 135)
+		player_.SetAliveState(false);
+	if (immortalityTime == 125)
+		player_.SetAliveState(true);
+	if (immortalityTime == 115)
+		player_.SetAliveState(false);
+	if (immortalityTime == 105)
+		player_.SetAliveState(true);
+	if (immortalityTime == 95)
+		player_.SetAliveState(false);
+	if (immortalityTime == 85)
+		player_.SetAliveState(true);
+}
+
+//Resetting parameters
+void Game::ResetGame()
+{
+	if (playerLives_ == 0)
+	{
+		asteroids_.clear();
+		PushAsteroidsPerRound();
+		playerLives_ = INITIAL_LIVES;
+		player_.PlayerRespawn();
+		roundCounter = 0;
+		playerScore_ = 0;
+		additionalLiveFactor = INCREASE_LIFE_FACTOR;
+		if (player_.GetDebuggingStatus())
+			player_.ChangeDebuggingState();
+	}
+}
+
+void Game::FontColor(int red, int green, int blue, int alpha)
+{
+	fontColor_.r = red;
+	fontColor_.g = green;
+	fontColor_.b = blue;
+	fontColor_.a = alpha;
+}
+
 Player Game::GetPlayer()
 {
 	return player_;
 }
 
+/*Managing delta time calculation*/
 void Game::PushDeltaTimeValues() 
 {
 
@@ -300,7 +492,6 @@ void Game::UpdateDeltaTime(double deltaTime)
 {
 
 	deltaTimeContainer_[deltaTimePosition] = Vector2((float)deltaTimePosition, deltaTime);
-
 	deltaTimePosition++;
 
 	if (deltaTimePosition >= MAXIMUM_FRAME_CAPACITY) {
@@ -309,6 +500,7 @@ void Game::UpdateDeltaTime(double deltaTime)
 	}
 }
 
+//Rendering the graphic for the frames
 void Game::RenderFramePlot() 
 {
 	if(player_.GetDebuggingStatus())
