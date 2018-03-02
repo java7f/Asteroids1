@@ -18,7 +18,6 @@ DisplayText::~DisplayText()
 bool DisplayText::InitializeFont()
 {
 	if (TTF_Init() == -1) {
-		SDL_Log("TTF_Init: %s\n", TTF_GetError());
 		return false;
 	}
 }
