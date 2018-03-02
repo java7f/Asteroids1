@@ -5,6 +5,7 @@
 #include "InputManager.hpp"
 #include "Color.hpp"
 #include "Palette.hpp"
+#include <irrKlang.h>
 #include <iostream>
 
 const double DESIRED_FRAME_RATE = 60.0;
@@ -13,9 +14,9 @@ const double X_AXIS_SCALE = 15.0;
 const double Y_AXIS_SCALE = 100000.0;
 const int MAXIMUM_FRAME_CAPACITY= 15;
 const int INITIAL_ASTEROIDS = 4;
-const int LIVES_X_POSITION = 50;
+const int LIVES_X_POSITION = 200;
 const int LIVES_Y_POSITION = 40;
-const int INCREASE_LIFE_FACTOR = 500;
+const int INCREASE_LIFE_FACTOR = 1000;
 
 class Game
 {
@@ -75,6 +76,7 @@ private:
 	std::vector<Ammo> playerBullets_;
 	std::vector<Vector2> deltaTimeContainer_;
 	std::vector<Vector2> livesShipContainer_;
+	irrklang::ISoundEngine* soundEngine_;
 	MathUtilities mathTools_;
 	int playerLives_;
 	int playerScore_;

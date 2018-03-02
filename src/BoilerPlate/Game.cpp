@@ -9,12 +9,13 @@ Game::Game()
 	graphColor = Palette();
 	orange = graphColor.getOrange();
 	deltaTimeContainer_ = std::vector<Vector2>(MAXIMUM_FRAME_CAPACITY);
+	soundEngine_ = irrklang::createIrrKlangDevice();
 	PushDeltaTimeValues();
 	playerLives_ = 3; 
 	playerScore_ = 0;
 	roundCounter = 0;
 	livesRenderMovement = 0;
-	additionalLiveFactor = 500;
+	additionalLiveFactor = 1000;
 }
 
 
@@ -47,8 +48,8 @@ void Game::RenderLives()
 	livesRenderMovement = 0;
 	for (int i = 0; i < playerLives_; i++)
 	{
-		livesPositionX = (-frameWidth + LIVES_X_POSITION) + livesRenderMovement;
-		livesPositionY = -frameHeight + LIVES_Y_POSITION;
+		livesPositionX = frameWidth - LIVES_X_POSITION + livesRenderMovement;
+		livesPositionY = frameHeight - LIVES_Y_POSITION;
 		glLoadIdentity();
 		glTranslated(livesPositionX, livesPositionY, 0.0);
 		glColor3d(1.0, 1.0, 1.0);
@@ -170,6 +171,7 @@ void Game::ShootBullets()
 		if (player_.GetDebuggingStatus())
 			newBullet.ChangeDebuggingState();
 		playerBullets_.push_back(newBullet);
+		soundEngine_->play2D("sounds/fire.wav");
 	}
 }
 
@@ -178,11 +180,12 @@ void Game::PlayerCollision()
 {
 	for (int i = 0; i < asteroids_.size(); i++)
 	{
-		if (CollidingDetection(player_, asteroids_[i]) && !player_.GetDebuggingStatus())
+		if (CollidingDetection(player_, asteroids_[i]) && !player_.GetDebuggingStatus() && playerLives_ > 0)
 		{
 			playerLives_--;
 			player_.SetAliveState(false);
 			player_.PlayerRespawn();
+			soundEngine_->play2D("sounds/saucerBig.wav");
 		}
 
 		if (playerLives_ == 0)
@@ -315,6 +318,8 @@ void Game::GameInputManager()
 	{
 		player_.MoveForward();
 		player_.SetMovingForwardState(true);
+		if(player_.GetAliveStatus())
+			soundEngine_->play2D("sounds/thrust.wav");
 	}
 	else
 	{
