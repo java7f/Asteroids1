@@ -5,6 +5,7 @@
 #include "InputManager.hpp"
 #include "Color.hpp"
 #include "Palette.hpp"
+#include "DisplayText.hpp"
 #include <irrKlang.h>
 #include <iostream>
 
@@ -12,11 +13,20 @@ const double DESIRED_FRAME_RATE = 60.0;
 const double DESIRED_FRAME_TIME = 1.0 / DESIRED_FRAME_RATE;
 const double X_AXIS_SCALE = 15.0;
 const double Y_AXIS_SCALE = 100000.0;
+const double SCORE_FONT_SIZE = 50.0;
+const double RESET_FONT_SIZE = 100;
 const int MAXIMUM_FRAME_CAPACITY= 15;
 const int INITIAL_ASTEROIDS = 4;
+const int INITIAL_LIVES = 3;
 const int LIVES_X_POSITION = 200;
 const int LIVES_Y_POSITION = 40;
-const int INCREASE_LIFE_FACTOR = 1000;
+const int INCREASE_LIFE_FACTOR = 2000;
+const int SCORE_X_POSITION = 200;
+const int SCORE_Y_POSITION = 110;
+const int ORIGIN = 0.0;
+const int MESSAGES_X_POSITION = -100;
+const int MESSAGES_Y_POSITION = 100;
+
 
 class Game
 {
@@ -29,6 +39,8 @@ public:
 	//Functions
 	void RenderGame();
 	void RenderLives();
+	void RenderPlayerScore();
+	void RenderResetGame();
 	void UpdateGame(double, double, double);
 	void DebuggingLine();
 	void PushAsteroidsPerRound();
@@ -42,10 +54,15 @@ public:
 	void RespawnPlayer();
 	void PushShipLivesVertices();
 	void IncreaseLivesPerScore();
+	void ResetGame();
+	void FontColor(int, int, int, int);
 	bool CollidingDetection(Entity, Entity);
 	int GetAsteroidsNumber();
+	DisplayText GetFont();
 	Player GetPlayer();
 	InputManager inputManger;
+	DisplayText *gameFont_;
+	SDL_Color fontColor_;
 
 	void PushDeltaTimeValues();
 	void UpdateDeltaTime(double);
@@ -61,6 +78,8 @@ public:
 	double bulletX, bulletY;
 	double frameHeight, frameWidth;
 	int livesPositionX, livesPositionY;
+	int scorePositionX, scorePositionY;
+	int messagesPositionX, messagesPositionY;
 	int livesRenderMovement;
 	int deltaTimePosition;
 	int roundCounter;

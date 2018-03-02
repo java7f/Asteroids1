@@ -1,4 +1,5 @@
 #include "Game.hpp"
+#include <string>
 
 Game::Game()
 {
@@ -11,11 +12,13 @@ Game::Game()
 	deltaTimeContainer_ = std::vector<Vector2>(MAXIMUM_FRAME_CAPACITY);
 	soundEngine_ = irrklang::createIrrKlangDevice();
 	PushDeltaTimeValues();
-	playerLives_ = 3; 
+	playerLives_ = INITIAL_LIVES; 
 	playerScore_ = 0;
 	roundCounter = 0;
 	livesRenderMovement = 0;
-	additionalLiveFactor = 1000;
+	additionalLiveFactor = 2000;
+	gameFont_ = new DisplayText(frameHeight, frameWidth, SCORE_FONT_SIZE);
+	gameFont_->InitializeFont();
 }
 
 
@@ -41,6 +44,8 @@ void Game::RenderGame()
 
 	RenderFramePlot();
 	DebuggingLine();
+	RenderPlayerScore();
+	RenderResetGame();
 }
 
 void Game::RenderLives()
@@ -62,6 +67,26 @@ void Game::RenderLives()
 		livesRenderMovement += 25;
 	}
 	
+}
+
+void Game::RenderPlayerScore()
+{
+	scorePositionX = frameWidth - SCORE_X_POSITION;
+	scorePositionY = frameHeight - SCORE_Y_POSITION;
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	gameFont_->FontRender(std::to_string(playerScore_),fontColor_, scorePositionX, scorePositionY, SCORE_FONT_SIZE);
+}
+
+void Game::RenderResetGame()
+{
+	if (playerLives_ == 0) 
+	{
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		gameFont_->FontRender("You lost!", fontColor_, MESSAGES_X_POSITION, MESSAGES_Y_POSITION, RESET_FONT_SIZE);
+		gameFont_->FontRender("Press R to restart the game.", fontColor_, MESSAGES_X_POSITION - 140, ORIGIN, RESET_FONT_SIZE);
+	}
 }
 
 void Game::UpdateGame(double deltaTime, double m_height, double m_width)
@@ -188,7 +213,7 @@ void Game::PlayerCollision()
 			soundEngine_->play2D("sounds/saucerBig.wav");
 		}
 
-		if (playerLives_ == 0)
+		if (playerLives_ == 0 && !player_.GetDebuggingStatus())
 		{
 			player_.SetAliveState(false);
 		}
@@ -219,6 +244,7 @@ void Game::BulletCollision()
 						}
 						asteroids_.erase(asteroids_.begin() + i);
 						playerBullets_.erase(playerBullets_.begin() + j);
+						soundEngine_->play2D("sounds/bangLarge.wav");
 						playerScore_ += 10;
 						ifCollision = true;
 					}
@@ -233,6 +259,7 @@ void Game::BulletCollision()
 						}
 						asteroids_.erase(asteroids_.begin() + i);
 						playerBullets_.erase(playerBullets_.begin() + j);
+						soundEngine_->play2D("sounds/bangMedium.wav");
 						playerScore_ += 20;
 						ifCollision = true;
 					}
@@ -240,6 +267,7 @@ void Game::BulletCollision()
 					{
 						asteroids_.erase(asteroids_.begin() + i);
 						playerBullets_.erase(playerBullets_.begin() + j);
+						soundEngine_->play2D("sounds/bangSmall.wav");
 						playerScore_ += 40;
 						ifCollision = true;
 					}
@@ -311,6 +339,11 @@ int Game::GetAsteroidsNumber()
 	return asteroids_.size();
 }
 
+DisplayText Game::GetFont()
+{
+	return *gameFont_;
+}
+
 //Manages the input keys for the game
 void Game::GameInputManager()
 {
@@ -360,7 +393,32 @@ void Game::IncreaseLivesPerScore()
 	{
 		playerLives_++;
 		additionalLiveFactor += INCREASE_LIFE_FACTOR;
+		soundEngine_->play2D("sounds/extraShip.wav");
 	}
+}
+
+void Game::ResetGame()
+{
+	if (playerLives_ == 0)
+	{
+		asteroids_.clear();
+		PushAsteroidsPerRound();
+		playerLives_ = INITIAL_LIVES;
+		player_.PlayerRespawn();
+		roundCounter = 0;
+		playerScore_ = 0;
+		additionalLiveFactor = INCREASE_LIFE_FACTOR;
+		if (player_.GetDebuggingStatus())
+			player_.ChangeDebuggingState();
+	}
+}
+
+void Game::FontColor(int red, int green, int blue, int alpha)
+{
+	fontColor_.r = red;
+	fontColor_.g = green;
+	fontColor_.b = blue;
+	fontColor_.a = alpha;
 }
 
 Player Game::GetPlayer()

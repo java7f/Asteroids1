@@ -6,7 +6,6 @@
 #include <GL/glew.h>
 #include <SDL_opengl.h>
 #include <SDL.h>
-#include <SDL_ttf.h>
 namespace Engine
 {
 	const float DESIRED_FRAME_RATE = 60.0f;
@@ -67,6 +66,7 @@ namespace Engine
 			return false;
 		}
 
+		game.GetFont().InitializeFont();
 		// Setup the viewport
 		//
 		SetupViewport();
@@ -102,6 +102,9 @@ namespace Engine
 		
 		case SDL_SCANCODE_F: //The F key activates and disables debugging mode
 			game.DebuggingModeToggle();
+			break;
+		case SDL_SCANCODE_R: //The F key activates and disables debugging mode
+			game.ResetGame();
 			break;
 		case SDL_SCANCODE_SPACE:
 			game.ShootBullets();
@@ -255,6 +258,7 @@ namespace Engine
 		SDL_DestroyWindow(m_mainWindow);
 
 		SDL_Quit();
+		game.GetFont().CleanUp();
 	}
 
 	void App::OnResize(int width, int height)

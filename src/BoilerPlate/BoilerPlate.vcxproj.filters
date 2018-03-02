@@ -18,6 +18,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Ammo.cpp" />
     <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="DisplayText.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.hpp" />
@@ -35,6 +36,7 @@
     <ClInclude Include="Game.hpp" />
     <ClInclude Include="Ammo.hpp" />
     <ClInclude Include="InputManager.hpp" />
+    <ClInclude Include="DisplayText.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
