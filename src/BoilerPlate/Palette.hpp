@@ -2,7 +2,7 @@
 #include "Color.hpp"
 
 //Class that contains different colors
-static class Palette
+class Palette
 {
 public:
 	Palette();

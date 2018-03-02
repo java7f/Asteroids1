@@ -17,6 +17,9 @@ Game::Game()
 	roundCounter = 0;
 	livesRenderMovement = 0;
 	additionalLiveFactor = 2000;
+	immortalityTime = RESET_IMMORTAL_TIME;
+	ifCollision = false;
+	isRespawning = false;
 	gameFont_ = new DisplayText(frameHeight, frameWidth, SCORE_FONT_SIZE);
 	gameFont_->InitializeFont();
 }
@@ -113,6 +116,18 @@ void Game::UpdateGame(double deltaTime, double m_height, double m_width)
 	{
 		roundCounter++;
 		PushAsteroidsPerRound();
+	}
+
+	if (isRespawning)
+	{
+		immortalityTime--;
+	}
+
+	if (immortalityTime == 0)
+	{
+		immortalityTime = RESET_IMMORTAL_TIME;
+		isRespawning = false;
+		ifCollision = true;
 	}
 
 	IncreaseLivesPerScore();
@@ -224,8 +239,7 @@ void Game::PlayerCollision()
 void Game::BulletCollision()
 {
 	if (!player_.GetDebuggingStatus()) {
-		bool ifCollision = false;
-
+		ifCollision = false;
 		for (int i = 0; i < asteroids_.size(); i++)
 		{
 			for (int j = 0; j < playerBullets_.size(); j++)
@@ -375,6 +389,8 @@ void Game::RespawnPlayer()
 	if (!player_.GetAliveStatus() && playerLives_ != 0)
 	{
 		player_.PlayerRespawn();
+		isRespawning = true;
+		ifCollision = false;
 	}
 }
 

@@ -13,8 +13,8 @@ const double DESIRED_FRAME_RATE = 60.0;
 const double DESIRED_FRAME_TIME = 1.0 / DESIRED_FRAME_RATE;
 const double X_AXIS_SCALE = 15.0;
 const double Y_AXIS_SCALE = 100000.0;
-const double SCORE_FONT_SIZE = 50.0;
-const double RESET_FONT_SIZE = 100;
+const int SCORE_FONT_SIZE = 50;
+const int RESET_FONT_SIZE = 100;
 const int MAXIMUM_FRAME_CAPACITY= 15;
 const int INITIAL_ASTEROIDS = 4;
 const int INITIAL_LIVES = 3;
@@ -23,9 +23,10 @@ const int LIVES_Y_POSITION = 40;
 const int INCREASE_LIFE_FACTOR = 2000;
 const int SCORE_X_POSITION = 200;
 const int SCORE_Y_POSITION = 110;
-const int ORIGIN = 0.0;
+const int ORIGIN = 0;
 const int MESSAGES_X_POSITION = -100;
 const int MESSAGES_Y_POSITION = 100;
+const int RESET_IMMORTAL_TIME = 150;
 
 
 class Game
@@ -54,6 +55,7 @@ public:
 	void RespawnPlayer();
 	void PushShipLivesVertices();
 	void IncreaseLivesPerScore();
+	void ManageRespawnStatus();
 	void ResetGame();
 	void FontColor(int, int, int, int);
 	bool CollidingDetection(Entity, Entity);
@@ -84,6 +86,9 @@ public:
 	int deltaTimePosition;
 	int roundCounter;
 	int additionalLiveFactor;
+	int immortalityTime;
+	bool isRespawning;
+	bool ifCollision;
 	Palette graphColor;
 	Color orange;
 
